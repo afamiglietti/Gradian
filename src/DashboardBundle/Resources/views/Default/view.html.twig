@@ -1,0 +1,109 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        {% if dash.role == 2 %}
+        <div class="col-md-12">
+            <h1>My Instructor's Dashboard for {{ dash.course.name }}</h1>
+            <h2>Enrolled Students</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Student Name</th>
+                    {% for category in dash.course.categories %}
+                    <th>{{ category.name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for dashboard in dashlist if dashboard.role == 1%}
+                <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td>
+                {% for category in dash.course.categories %}
+                    <td>
+                        {% for submission in newsubmissionlist if submission.user == dashboard.user and submission.assignment.category == category %}
+                            <a href="javascript:void(0);" data-id="{{ submission.id }}" class="btn btn-primary evaluateAssignment">Evaluate {{ submission.assignment.name }} submission</a> <br>
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <h2>Pending Students</h2>
+            <table>
+                {% for dashboard in dashlist if dashboard.role == 0%}
+                    <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td><td><a href="{{ path('approve_student', {'userid':dashboard.user.id, 'courseid':dashboard.course.id}) }}">Enroll Student</a></td></tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+
+        {% if dash.role == 1 %}
+        <div class="col-md-12">
+            <h1>My Student Dashboard for {{ dash.course.name }}</h1>
+        </div>
+            <div class="col-md-3">
+                <div id="progress"></div>
+                <h2>{{ dash.course.maxPoints }}</h2>
+                <h2>Maximum Score Possible</h2>
+            </div>
+            <div class="col-md-9">
+                <div class="row">
+                    {% for category in dash.course.categories %}
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    {{ category.name }} - Worth {{ category.maxPoints }} Possible Points
+                                </h3>
+                            </div>
+                            <div class="panel-body">
+                                <p>{{ category.description }}</p>
+                                <a href="javascript:void(0);" class="btn btn-primary submitAssignment" data-id="{{ category.id }}">Submit Work in This Category</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if dash.role == 0 %}
+        <div class="col-md-12">
+            <h1>Your enrollment in {{ dash.course.name }} is pending instructor approval. Check back later.</h1>
+        </div>
+        {% endif %}
+
+    </div>
+    <div id="submitModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script language="JavaScript">
+    window.onload = function onLoad() {
+        var circle = new ProgressBar.Circle('#progress', {
+            color: '#FCB03C',
+            duration: 1000,
+            easing: 'easeInOut',
+            strokeWidth:5
+        });
+
+        circle.animate(.5);
+    };
+
+    $('.submitAssignment').click( function() {
+        var catId = $(this).data('id');
+        var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
+        url = url.replace( "catId", catId );
+        $('#submitModal').load(url);
+    });
+
+    $('.evaluateAssignment').click( function() {
+        var submissionId = $(this).data('id');
+        var url="{{ path( 'submission_evaluate', { 'submissionid':'submitId'}) }}";
+        url = url.replace( "submitId", submissionId );
+        $('#submitModal').load(url);
+    });
+</script>
+{% endblock %}

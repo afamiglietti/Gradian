@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Enrollment Search</h2>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    {% if possible_classes %}
+        <table>
+        <tr>
+            <th>Class Name</th> <th>Instructor</th> <th>Enrollment Link</th>
+        </tr>
+        {% for class in possible_classes %}
+            <tr><td>{{ class.name }}</td> <td>{{ class.owner.lastname }}</td> <td> <a href="{{ path('enroll_student', {'courseid':class.id}) }}">Enroll in this class</a></td></tr>
+        {% endfor %}
+        </table>
+    {% endif %}
+    </div>
+        <div class="col-md-6">
+        Search for your instructor's last name using the search form, then click the "enroll" link next to your class's name + time in the list that appears.
+        </div>
+    </div>
+{% endblock %}

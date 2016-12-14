@@ -1,0 +1,23 @@
+{
+  "name": "feedbackTool",
+  "authors": [
+    "Andrew Famiglietti <afamiglietti@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "GPL 2.0",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "progressbar.js": "^1.0.1"
+  }
+}

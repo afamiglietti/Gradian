@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_row(form.name) }}
+        {{ form_row(form.instructions) }}
+        {{ form_row(form.recurring) }}
+        {{ form_row(form.maxSubmissions) }}
+        {{ form_row(form.dueDate) }}
+        {{ form_row(form.category) }}
+        <a href="javascript:void(0)" class="btn btn-primary" id="newCat">New Category</a>
+    {{ form_end(form) }}
+
+    <div id="catModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+    <script language="JavaScript">
+        $("label[for='assignment_maxSubmissions']").hide();
+        $('#assignment_maxSubmissions').prop('type', 'hidden');
+        $('#newCat').on('click', function(ev) {
+            $('#catModal').load('{{ path('category_new', {'courseid':courseid}) }}');
+        });
+        $('#assignment_recurring').change(
+                function() {
+                    if($('#assignment_maxSubmissions').prop('type') == 'hidden') {
+                        $('#assignment_maxSubmissions').prop('type', 'number');
+                        $("label[for='assignment_maxSubmissions']").show();
+                    }
+                    else {
+                        $('#assignment_maxSubmissions').prop('type', 'hidden');
+                        $("label[for='assignment_maxSubmissions']").hide();
+                    }
+                }
+        );
+    </script>
+{% endblock %}
+

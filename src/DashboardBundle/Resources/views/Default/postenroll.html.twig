@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Enrollment Success</h2>
+            You have successfully submitted for enrollment in {{ course.name }}. Once the course instructor approves your enrollment, you will be able to access your dashboard.
+        </div>
+        <a href="{{ path('course_index') }}" class="btn btn-primary">Return to my course list</a>
+    </div>
+{% endblock %}

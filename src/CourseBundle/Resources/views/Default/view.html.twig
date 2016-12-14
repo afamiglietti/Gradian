@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-6">
+            <h2>{{ course.name }}</h2>
+            <br>Created By: {{ course.owner.username }}
+            <h3>Course Description</h3>
+            <p>{{ course.description }}</p>
+            <h3>Assignments</h3>
+            {% for category in course.categories %}
+            <h4>{{ category.name }} - Max Score = {{ category.maxPoints }} / Total Points Available = {{ category.points }}</h4>
+            <table>
+                <tr><th>Assignment Name</th> <th>Points</th></tr>
+                {% for assignment in category.assignments %}
+                <tr><td>{{ assignment.name }}</td>
+                    <td>{{ assignment.points }}</td>
+                    <td> <a href="{{ path('assignment_edit', {'assignmentid':assignment.id })}}" class="btn">Edit Assignment</a> </td>
+                    <td> <a href="{{ path('assignment_delete', {'assignmentid':assignment.id })}}" class="btn btn-danger">Delete Assignment</a> </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% endfor %}
+            <h4>Max Score: {{ course.maxPoints }}</h4>
+            <h4>Total Points Available: {{ course.points }}</h4>
+            <a href="{{ path('assignment_new', {'courseid':course.id}) }}" class="btn btn-primary">Create New Assignment</a>
+        </div>
+    </div>
+{% endblock %}
