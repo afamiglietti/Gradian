@@ -29,14 +29,21 @@ class CategoryProgress
      *
      * @ORM\Column(name="pointsEarned", type="integer")
      */
-    private $pointsEarned;
+    private $pointsEarned = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="notification", type="integer")
      */
-    private $notification;
+    private $notification = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="submissions", type="integer")
+     */
+    private $submissions = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="categoryProgresses")
@@ -152,5 +159,29 @@ class CategoryProgress
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set submissions
+     *
+     * @param integer $submissions
+     *
+     * @return CategoryProgress
+     */
+    public function setSubmissions($submissions)
+    {
+        $this->submissions = $submissions;
+
+        return $this;
+    }
+
+    /**
+     * Get submissions
+     *
+     * @return integer
+     */
+    public function getSubmissions()
+    {
+        return $this->submissions;
     }
 }

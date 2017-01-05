@@ -1,0 +1,14 @@
+.scoreLabel{
+    font-size: 3em;
+    font-weight: bold;
+}
+
+.category-info h3{
+    margin-top: 5px;
+}
+
+#dash-head {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: solid 1px black;
+}

@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="row">
-        {% if dash.role == 2 %}
+
+        {# if the dash role is 2, display the instructor dashboard #}
+    {% if dash.role == 2 %}
+        <div class="row">
         <div class="col-md-12">
             <h1>My Instructor's Dashboard for {{ dash.course.name }}</h1>
             <h2>Enrolled Students</h2>
@@ -35,18 +37,24 @@
                 {% endfor %}
             </table>
         </div>
-        {% endif %}
-
-        {% if dash.role == 1 %}
-        <div class="col-md-12">
-            <h1>My Student Dashboard for {{ dash.course.name }}</h1>
         </div>
-            <div class="col-md-3">
+        {% endif %}
+        {# end of instructor dashboard#}
+
+        {# if the dash role is 1, display the student dashboard #}
+        {% if dash.role == 1 %}
+        <div class="row">
+        <div class="col-md-12">
+            <h1 id="dash-head">{{ dash.user.firstname }} {{ dash.user.lastname }}'s Dashboard for {{ dash.course.name }}</h1>
+        </div>
+        </div>
+            <div class="row">
+            <div class="col-md-2">
+
                 <div id="progress"></div>
-                <h2>{{ dash.course.maxPoints }}</h2>
-                <h2>Maximum Score Possible</h2>
+                <h2> out of {{ dash.course.maxPoints }}</h2>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <div class="row">
                     {% for category in dash.course.categories %}
                     <div class="col-md-6">
@@ -56,8 +64,17 @@
                                     {{ category.name }} - Worth {{ category.maxPoints }} Possible Points
                                 </h3>
                             </div>
-                            <div class="panel-body">
-                                <p>{{ category.description }}</p>
+                            <div class="panel-body category-info">
+                                <h3>Progress:</h3>
+                                <h4>Points: {{ catprogresslist[category.id].pointsEarned }}/{{ category.maxPoints }}</h4>
+                                {% set currentprogress = (catprogresslist[category.id].pointsEarned / category.maxPoints) * 100 %}
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ currentprogress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ currentprogress }}%;">
+                                        {{ currentprogress }}%
+                                    </div>
+                                </div>
+                                <h4>Assignments: {{ catprogresslist[category.id].submissions }} out of {{ category.totalAssignments }}</h4>
+                                <a href="javascript:void(0);" class="btn btn-primary viewCategory" data-id="{{ category.id }}">More About This Category</a>
                                 <a href="javascript:void(0);" class="btn btn-primary submitAssignment" data-id="{{ category.id }}">Submit Work in This Category</a>
                             </div>
                         </div>
@@ -65,7 +82,15 @@
                     {% endfor %}
                 </div>
             </div>
+            <div class="col-md-2">
+                <div id="calendar"></div>
+            </div>
+            </div>
+
         {% endif %}
+        {# end of student dashboard#}
+
+        {# if the dash role is 0, display the placeholder for pending students #}
 
         {% if dash.role == 0 %}
         <div class="col-md-12">
@@ -77,33 +102,66 @@
     <div id="submitModal" class="modal fade" tabindex="-1" role="dialog">
 
     </div>
+
+    <div id="catModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
 {% endblock %}
 
 {% block javascripts %}
 <script language="JavaScript">
-    window.onload = function onLoad() {
-        var circle = new ProgressBar.Circle('#progress', {
-            color: '#FCB03C',
-            duration: 1000,
-            easing: 'easeInOut',
-            strokeWidth:5
+    $(document).ready(function() {
+
+        $('#calendar').fullCalendar({
         });
 
-        circle.animate(.5);
-    };
+        var progress = {{ totalscore }} / {{ dash.course.maxPoints }};
 
-    $('.submitAssignment').click( function() {
-        var catId = $(this).data('id');
-        var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
-        url = url.replace( "catId", catId );
-        $('#submitModal').load(url);
+        var color = "#000";
+
+        if(progress < .5){
+            color = "#0c45d3";
+        } else if (progress < .8){
+            color = "#FFAB00";
+        } else {
+            color = "#00DF27";
+        }
+
+        var circle = new ProgressBar.Circle('#progress', {
+            duration: 1000,
+            easing: 'easeInOut',
+            strokeWidth: 20,
+            trailWidth: 20,
+            trailColor: '#999999',
+            color: color,
+            text: { value: '{{ totalscore }}',
+                    className: 'scoreLabel'}
+        });
+
+        circle.animate(progress);
+
+        $('.submitAssignment').click( function() {
+            var catId = $(this).data('id');
+            var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
+            url = url.replace( "catId", catId );
+            $('#submitModal').load(url);
+        });
+
+        $('.evaluateAssignment').click( function() {
+            var submissionId = $(this).data('id');
+            var url="{{ path( 'submission_evaluate', { 'submissionid':'submitId'}) }}";
+            url = url.replace( "submitId", submissionId );
+            $('#submitModal').load(url);
+        });
+
+        $('.viewCategory').click( function() {
+            var catId = $(this).data('id');
+            var url="{{ path( 'category_view_modal', { 'categoryid':'catId'}) }}";
+            url = url.replace( "catId", catId );
+            $('#catModal').load(url);
+        });
+
     });
 
-    $('.evaluateAssignment').click( function() {
-        var submissionId = $(this).data('id');
-        var url="{{ path( 'submission_evaluate', { 'submissionid':'submitId'}) }}";
-        url = url.replace( "submitId", submissionId );
-        $('#submitModal').load(url);
-    });
 </script>
 {% endblock %}

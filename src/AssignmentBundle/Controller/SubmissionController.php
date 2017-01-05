@@ -30,6 +30,7 @@ class SubmissionController extends Controller
     {
         $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
         $user = $this->get('security.token_storage')->getToken()->getUser();
+        $catProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('category'=>$category, 'user'=>$user));
 
         $assignments = $category->getAssignments();
 
@@ -42,8 +43,11 @@ class SubmissionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $submission = $form->getData();
             $submission->setSubmitted(new \DateTime());
+            $currentSubmissions = $catProgress->getSubmissions();
+            $catProgress->setSubmissions($currentSubmissions + 1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($submission);
+            $em->persist($catProgress);
             $em->flush();
             return $this->redirectToRoute('dash_view', array('courseid' => $category->getCourse()->getId()));
         }
@@ -60,12 +64,23 @@ class SubmissionController extends Controller
     {
         $submission = $this->getDoctrine()->getRepository('AssignmentBundle:Submission')->find($submissionid);
 
+        $course = $submission->getAssignment()->getCourse();
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('user' => $submission->getUser(), 'category' => $submission->getAssignment()->getCategory()));
+
         $form = $this->createForm(EvaluateSubmissionType::class, $submission);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $submission = $form->getData();
+
+            $currentPoints = $course->getMaxPoints();
+            $course->setMaxpoints($currentPoints + $submission->getPoints());
+            $currentPoints = $categoryProgress->getPointsEarned();
+            $categoryProgress->setPointsEarned($currentPoints + $submission->getPoints());
+
             $em = $this->getDoctrine()->getManager();
+            $em->persist($course);
+            $em->persist($categoryProgress);
             $em->persist($submission);
             $em->flush();
             return $this->redirectToRoute('dash_view', array('courseid' => $submission->getAssignment()->getCourse()->getId()));

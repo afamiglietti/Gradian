@@ -4,7 +4,7 @@
         <div class="col-md-12">
             {% if "ROLE_INSTRUCTOR" in app.user.roles %}
                 <h1>Courses I Am Teaching</h1>
-                <table class="table-striped">
+                <table class="table table-striped">
                     {% for course in courses %}
                     <tr><td>{{ course.name }}</td>
                     <td>{{ course.startDate|date('m-d-Y') }}</td>
@@ -17,9 +17,13 @@
                 </table>
                 <a href="{{ path('course_new') }}" class="btn btn-primary">Create a New Class</a>
             {% endif %}
+            <hr>
+        </div>
+
+        <div class="col-md-12">
             {% if dashboards %}
             <h1>Courses I Am Enrolled In</h1>
-            <table class="table-striped">
+            <table class="table table-striped">
             {% for dash in dashboards %}
                 <tr>
                 <td>{{ dash.course.name }}</td>
@@ -27,6 +31,7 @@
                 </tr>
             {% endfor %}
             </table>
+            {% else %}
             {% endif %}
             <a href="{{ path('enroll_search') }}" class="btn btn-primary">Enroll in a Class</a>
         </div>

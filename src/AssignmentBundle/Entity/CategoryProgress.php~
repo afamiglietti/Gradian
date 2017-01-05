@@ -29,22 +29,29 @@ class CategoryProgress
      *
      * @ORM\Column(name="pointsEarned", type="integer")
      */
-    private $pointsEarned;
+    private $pointsEarned = 0;
 
     /**
      * @var int
      *
      * @ORM\Column(name="notification", type="integer")
      */
-    private $notification;
+    private $notification = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="CategoryProgresses")
+     * @var int
+     *
+     * @ORM\Column(name="submissions", type="integer")
+     */
+    private $submissions = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="categoryProgresses")
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AssignmentBundle\Entity\Category", inversedBy="CategoryProgresses")
+     * @ORM\ManyToOne(targetEntity="AssignmentBundle\Entity\Category", inversedBy="categoryProgresses")
      */
     protected $category;
 
@@ -105,5 +112,52 @@ class CategoryProgress
     {
         return $this->notification;
     }
-}
 
+    /**
+     * Set user
+     *
+     * @param \UserBundle\Entity\User $user
+     *
+     * @return CategoryProgress
+     */
+    public function setUser(\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \UserBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \AssignmentBundle\Entity\Category $category
+     *
+     * @return CategoryProgress
+     */
+    public function setCategory(\AssignmentBundle\Entity\Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \AssignmentBundle\Entity\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+}

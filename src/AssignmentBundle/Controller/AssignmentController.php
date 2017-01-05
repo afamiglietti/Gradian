@@ -8,6 +8,7 @@ use AssignmentBundle\Form\AssignmentType;
 use AssignmentBundle\Form\CategoryType;
 use AssignmentBundle\Entity\Assignment;
 use AssignmentBundle\Entity\Category;
+use AssignmentBundle\Entity\CategoryProgress;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
@@ -50,12 +51,18 @@ class AssignmentController extends Controller
                 $category->setPoints($currentpoints + $assignment->getPoints() * $assignment->getMaxSubmissions());
                 $currentpoints = $course->getPoints();
                 $course->setPoints($currentpoints + $assignment->getPoints() * $assignment->getMaxSubmissions());
+
+                $currentAssignments = $category->getTotalAssignments();
+                $category->setTotalAssignments($currentAssignments + $assignment->getMaxSubmissions());
         }
             else {
                 $currentpoints = $category->getPoints();
                 $category->setPoints($currentpoints + $assignment->getPoints());
                 $currentpoints = $course->getPoints();
                 $course->setPoints($currentpoints + $assignment->getPoints());
+
+                $currentAssignments = $category->getTotalAssignments();
+                $category->setTotalAssignments($currentAssignments + 1);
             }
             //persist everything
             $em = $this->getDoctrine()->getManager();
@@ -92,6 +99,16 @@ class AssignmentController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
             $em->persist($course);
+
+            $dashList = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findBy(array('course' => $course, 'role' => array(0, 1)));
+            if($dashList) {
+                foreach ($dashList as $dash) {
+                    $categoryprogress = new CategoryProgress();
+                    $categoryprogress->setCategory($category);
+                    $categoryprogress->setUser($dash->getUser());
+                    $em->persist($categoryprogress);
+                }
+            }
             $em->flush();
             return $this->redirectToRoute('assignment_new', array('courseid' => $courseid));
         }
@@ -149,12 +166,18 @@ class AssignmentController extends Controller
             $category->setPoints($currentpoints - $assignment->getPoints() * $assignment->getMaxSubmissions());
             $currentpoints = $course->getPoints();
             $course->setPoints($currentpoints - $assignment->getPoints() * $assignment->getMaxSubmissions());
+
+            $currentAssignments = $category->getTotalAssignments();
+            $category->setTotalAssignments($currentAssignments - $assignment->getMaxSubmissions());
         }
         else {
             $currentpoints = $category->getPoints();
             $category->setPoints($currentpoints - $assignment->getPoints());
             $currentpoints = $course->getPoints();
             $course->setPoints($currentpoints - $assignment->getPoints());
+
+            $currentAssignments = $category->getTotalAssignments();
+            $category->setTotalAssignments($currentAssignments - 1);
         }
 
 
@@ -170,12 +193,18 @@ class AssignmentController extends Controller
                 $category->setPoints($currentpoints + $assignment->getPoints() * $assignment->getMaxSubmissions());
                 $currentpoints = $course->getPoints();
                 $course->setPoints($currentpoints + $assignment->getPoints() * $assignment->getMaxSubmissions());
+
+                $currentAssignments = $category->getTotalAssignments();
+                $category->setTotalAssignments($currentAssignments + $assignment->getMaxSubmissions());
             }
             else {
                 $currentpoints = $category->getPoints();
                 $category->setPoints($currentpoints + $assignment->getPoints());
                 $currentpoints = $course->getPoints();
                 $course->setPoints($currentpoints + $assignment->getPoints());
+
+                $currentAssignments = $category->getTotalAssignments();
+                $category->setTotalAssignments($currentAssignments + 1);
             }
             //persist everything
             $em = $this->getDoctrine()->getManager();
@@ -188,4 +217,15 @@ class AssignmentController extends Controller
         return $this->render('AssignmentBundle:Assignment:new.html.twig', array('form' => $form->createView(), 'courseid' => $courseid,));
     }
 
+    /**
+     * View a category from a modal
+     *
+     * @Route("/view_category/{categoryid}", name="category_view_modal")
+     */
+    public function viewCategoryModalAction($categoryid)
+    {
+        $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
+
+        return $this->render('AssignmentBundle:Category:viewmodal.html.twig', array('category' => $category));
+    }
 }

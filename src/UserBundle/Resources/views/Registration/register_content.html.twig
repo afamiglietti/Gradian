@@ -1,0 +1,9 @@
+{% trans_default_domain 'FOSUserBundle' %}
+<h1>Welcome to Gradian!</h1>
+To get started register for an account below
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+    {{ form_widget(form) }}
+<div>
+    <button type="submit" value="{{ 'registration.submit'|trans }}" class="btn btn-primary">Submit Registration</button>
+</div>
+{{ form_end(form) }}

@@ -6,6 +6,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DashboardBundle\Entity\Dashboard;
 use UserBundle\Entity\User;
+use AssignmentBundle\Entity\CategoryProgress;
+use AssignmentBundle\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -68,14 +70,23 @@ class DashboardController extends Controller
                     }
                 }
             }
+            $catProgressList = null;
+            $totalScore = null;
         }
         else{
             $newSubmissionsList = null;
             $dashList = null;
+            $catProgressList = array();
+            $totalScore = 0;
+            foreach($user->getCategoryProgresses() as $catprogress){
+                $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
+                $totalScore = $totalScore + $catprogress->getPointsEarned();
+            }
+
         }
 
 
-        return $this->render('DashboardBundle:Default:view.html.twig', array('dash'=>$dash, 'dashlist'=>$dashList, 'newsubmissionlist'=>$newSubmissionsList));
+        return $this->render('DashboardBundle:Default:view.html.twig', array('dash'=>$dash, 'dashlist'=>$dashList, 'newsubmissionlist'=>$newSubmissionsList, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore));
     }
 
     /**
@@ -122,6 +133,15 @@ class DashboardController extends Controller
         $dash->setRole($dash::ROLE_INACTIVE);
 
         $em = $this->getDoctrine()->getManager();
+
+        foreach($course->getCategories() as $category){
+            $categoryProgress = new CategoryProgress();
+            $categoryProgress->setCategory($category);
+            $categoryProgress->setUser($user);
+            $em->persist($categoryProgress);
+        }
+
+        $em = $this->getDoctrine()->getManager();
         $em->persist($dash);
         $em->flush();
 
@@ -145,4 +165,5 @@ class DashboardController extends Controller
 
         return $this->redirectToRoute('dash_view', array('courseid' => $courseid));
     }
+
 }
