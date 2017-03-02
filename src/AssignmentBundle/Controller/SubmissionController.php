@@ -45,14 +45,40 @@ class SubmissionController extends Controller
             $submission->setSubmitted(new \DateTime());
             $currentSubmissions = $catProgress->getSubmissions();
             $catProgress->setSubmissions($currentSubmissions + 1);
+            $currentUnread = $catProgress->getUnread();
+            $catProgress->setUnread($currentUnread + 1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($submission);
             $em->persist($catProgress);
             $em->flush();
-            return $this->redirectToRoute('dash_view', array('courseid' => $category->getCourse()->getId()));
+            return $this->redirectToRoute('student_dash_view', array('courseid' => $category->getCourse()->getId()));
         }
 
         return $this->render('AssignmentBundle:Submission:new.html.twig', array('form' => $form->createView(), 'category' => $category,));
+    }
+
+    /**
+     * Return a list of not yet evaluated submissions to evaluate
+     *
+     * @Route("/unreadevaluate/{userid}/{categoryid}", name="unread_evaluate")
+     */
+    public function unreadEvalAction($userid, $categoryid){
+
+        $catRepository = $this->getDoctrine()->getRepository('AssignmentBundle:Category');
+
+        $category = $catRepository->find($categoryid);
+        $assignments = $category->getAssignments();
+        $assignmentIds = array();
+        foreach($assignments as $assignment){
+            $assignmentIds[] = $assignment -> getId();
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AssignmentBundle:Submission');
+
+
+        $submissions = $repository->findBy(array('user' => $userid, 'assignment' => $assignmentIds, 'points' => null));
+
+        return $this->render('AssignmentBundle:Submission:unreadevaluate.html.twig', array('submissions' =>$submissions));
     }
 
     /**
@@ -67,6 +93,10 @@ class SubmissionController extends Controller
         $course = $submission->getAssignment()->getCourse();
         $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('user' => $submission->getUser(), 'category' => $submission->getAssignment()->getCategory()));
 
+        if($submission->getPoints() === null){
+            $newSubmit = true;
+        }
+
         $form = $this->createForm(EvaluateSubmissionType::class, $submission);
         $form->handleRequest($request);
 
@@ -77,6 +107,11 @@ class SubmissionController extends Controller
             $course->setMaxpoints($currentPoints + $submission->getPoints());
             $currentPoints = $categoryProgress->getPointsEarned();
             $categoryProgress->setPointsEarned($currentPoints + $submission->getPoints());
+
+            if($newSubmit){
+                $currentUnread = $categoryProgress->getUnread();
+                $categoryProgress->setUnread($currentUnread - 1);
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($course);

@@ -58,7 +58,7 @@ class Course
 
     /**
      * A total points field, keeping track of total points available in all assignments
-     * This way we can compute it once and not over and over every time a dashboard is rendered
+     * Tracked so instructor can see how many extra points are available
      *
      * @var int
      * @ORM\Column(name="points", type="integer")
@@ -66,13 +66,44 @@ class Course
     private $points = 0;
 
     /**
-     * A maxpoints field, keeping track of the maximum points that can be earned in all categories
-     * Since categories may have more points available than can actually be earned this needs to be track seperately
+     * A maxpoints field, keeping track of the maximum points that need to be earned for full credit in the course. Set by the instructor.
      *
      * @var int
      * @ORM\Column(name="maxpoints", type="integer")
      */
     private $maxPoints = 0;
+
+    /**
+     * The A grade cut-off.
+     *
+     * @var int
+     * @ORM\Column(name="gradea", type="integer")
+     */
+    private $gradeA = 0;
+
+    /**
+     * The B grade cut-off.
+     *
+     * @var int
+     * @ORM\Column(name="gradeb", type="integer")
+     */
+    private $gradeB = 0;
+
+    /**
+     * The C grade cut-off.
+     *
+     * @var int
+     * @ORM\Column(name="gradec", type="integer")
+     */
+    private $gradeC = 0;
+
+    /**
+     * The D grade cut-off.
+     *
+     * @var int
+     * @ORM\Column(name="graded", type="integer")
+     */
+    private $gradeD = 0;
 
     /**
      * A deleted field marks deleted courses
@@ -437,5 +468,101 @@ class Course
     public function getMaxPoints()
     {
         return $this->maxPoints;
+    }
+
+    /**
+     * Set gradeA
+     *
+     * @param integer $gradeA
+     *
+     * @return Course
+     */
+    public function setGradeA($gradeA)
+    {
+        $this->gradeA = $gradeA;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeA
+     *
+     * @return integer
+     */
+    public function getGradeA()
+    {
+        return $this->gradeA;
+    }
+
+    /**
+     * Set gradeB
+     *
+     * @param integer $gradeB
+     *
+     * @return Course
+     */
+    public function setGradeB($gradeB)
+    {
+        $this->gradeB = $gradeB;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeB
+     *
+     * @return integer
+     */
+    public function getGradeB()
+    {
+        return $this->gradeB;
+    }
+
+    /**
+     * Set gradeC
+     *
+     * @param integer $gradeC
+     *
+     * @return Course
+     */
+    public function setGradeC($gradeC)
+    {
+        $this->gradeC = $gradeC;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeC
+     *
+     * @return integer
+     */
+    public function getGradeC()
+    {
+        return $this->gradeC;
+    }
+
+    /**
+     * Set gradeD
+     *
+     * @param integer $gradeD
+     *
+     * @return Course
+     */
+    public function setGradeD($gradeD)
+    {
+        $this->gradeD = $gradeD;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeD
+     *
+     * @return integer
+     */
+    public function getGradeD()
+    {
+        return $this->gradeD;
     }
 }

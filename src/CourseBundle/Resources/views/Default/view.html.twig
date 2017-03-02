@@ -1,16 +1,24 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="row">
-        <div class="col-md-6">
-            <h2>{{ course.name }}</h2>
+        <div class="col-md-3">
+            <h1>{{ course.name }}</h1>
             <br>Created By: {{ course.owner.username }}
             <h3>Course Description</h3>
             <p>{{ course.description }}</p>
-            <h3>Assignments</h3>
+            <h4>Max Score: {{ course.maxPoints }}</h4>
+            <h4>Total Points Available: {{ course.points }}</h4>
+            <a href="javascript:void(0);" class="btn btn-primary editCourse">Edit Course</a>
+            <a href="{{ path('instr_dash_view', {'courseid':course.id}) }}" class="btn btn-primary">Go to Course Dashboard</a>
+        </div>
+        <div class="col-md-9">
+            <h2>Assignments</h2>
             {% for category in course.categories %}
-            <h4>{{ category.name }} - Max Score = {{ category.maxPoints }} / Total Points Available = {{ category.points }}</h4>
-            <table>
-                <tr><th>Assignment Name</th> <th>Points</th></tr>
+            <div class="category">
+                <h3>{{ category.name }} - Max Score = {{ category.maxPoints }} / Total Points Available = {{ category.points }}
+                    <a href="javascript:void(0);" class="btn btn-danger deleteCategory" data-id="{{ category.id }}">Delete Category</a></h3>
+            <table class="table table-striped">
+                <tr><th>Assignment Name</th> <th>Points</th><th>Edit Assignment</th><th>Delete Assignment</th></tr>
                 {% for assignment in category.assignments %}
                 <tr><td>{{ assignment.name }}</td>
                     <td>{{ assignment.points }}</td>
@@ -19,10 +27,40 @@
                 </tr>
                 {% endfor %}
             </table>
+            </div>
             {% endfor %}
-            <h4>Max Score: {{ course.maxPoints }}</h4>
-            <h4>Total Points Available: {{ course.points }}</h4>
+
             <a href="{{ path('assignment_new', {'courseid':course.id}) }}" class="btn btn-primary">Create New Assignment</a>
+
         </div>
     </div>
+
+    <div id="editModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+
+    <div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
 {% endblock %}
+
+{% block javascripts %}
+    <script language="JavaScript">
+        $(document).ready(function(){
+            $('.editCourse').click(function() {
+                $('#editModal').load('{{path('course_edit', {'courseid':course.id}) }}');
+            });
+
+            $('.deleteCategory').click(function() {
+                var catId = $(this).data('id');
+                var url="{{ path( 'category_delete', { 'categoryid':'catId'}) }}";
+                url = url.replace( "catId", catId );
+                $('#deleteModal').load(url);
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+

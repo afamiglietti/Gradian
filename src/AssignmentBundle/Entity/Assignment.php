@@ -57,13 +57,6 @@ class Assignment
     private $required;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="quick_points", type="boolean")
-     */
-    private $quickPoints;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="points", type="integer", nullable=true)
@@ -98,7 +91,7 @@ class Assignment
 
     /**
      * @ORM\ManyToOne(targetEntity="AssignmentBundle\Entity\Category", inversedBy="assignments")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $category;
 

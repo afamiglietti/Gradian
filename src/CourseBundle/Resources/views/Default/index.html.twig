@@ -11,7 +11,7 @@
                     <td>{{ course.endDate|date('m-d-Y') }}</td>
                     <td>{{ course.meetingTime|date('G:i') }}</td>
                     {% if "ROLE_INSTRUCTOR" in app.user.roles %}<td><a href="{{ path('course_view', {'courseid':course.id}) }}">View/Edit Course Settings/Assignments</a></td>{% endif %}
-                    <td><a href="{{ path('dash_view', {'courseid':course.id}) }}">Go to course dashboard</a></td>
+                    <td><a href="{{ path('instr_dash_view', {'courseid':course.id}) }}">Go to course dashboard</a></td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -27,7 +27,7 @@
             {% for dash in dashboards %}
                 <tr>
                 <td>{{ dash.course.name }}</td>
-                <td><a href="{{ path('dash_view', {'courseid':dash.course.id}) }}">Go to my dashboard</a></td>
+                <td><a href="{{ path('student_dash_view', {'courseid':dash.course.id}) }}">Go to my dashboard</a></td>
                 </tr>
             {% endfor %}
             </table>

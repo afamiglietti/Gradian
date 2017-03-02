@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use CourseBundle\Form\CourseType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 
@@ -39,15 +40,10 @@ class CourseController extends Controller
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $course->setOwner($user);
+        $course->setStartDate(new \DateTime());
+        $course->setEndDate(new \DateTime());
 
-        $form = $this->createFormBuilder($course)
-            ->add('name', TextType::class)
-            ->add('description', TextType::class)
-            ->add('start_date', DateType::class)
-            ->add('end_date', DateType::class)
-            ->add('meeting_time', TimeType::class)
-            ->add('save', SubmitType::class, array('label' => 'Create Course'))
-            ->getForm();
+        $form = $this->createForm(CourseType::class, $course);
 
         $form->handleRequest($request);
 
@@ -73,5 +69,30 @@ class CourseController extends Controller
         $course = $this->getDoctrine()->getRepository('CourseBundle:Course')->find($courseid);
 
         return $this->render('CourseBundle:Default:view.html.twig', array('course' => $course));
+    }
+
+    /**
+     * @Route("/edit/{courseid}", name="course_edit")
+     */
+    public function editAction($courseid, Request $request)
+    {
+        $course = $this->getDoctrine()->getRepository('CourseBundle:Course')->find($courseid);
+
+        $form = $this->createForm(CourseType::class, $course);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+            $course = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($course);
+            $em->flush();
+
+            return $this->redirectToRoute('course_view', array('courseid'=>$courseid));
+
+        }
+
+        return $this->render('CourseBundle:Default:edit.html.twig', array('course' => $course, 'form' => $form->createView()));
     }
 }

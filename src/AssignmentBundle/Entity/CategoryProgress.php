@@ -32,11 +32,18 @@ class CategoryProgress
     private $pointsEarned = 0;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="notification", type="string", length=255)
+     */
+    private $notification;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="notification", type="integer")
+     * @ORM\Column(name="quickpoints", type="integer")
      */
-    private $notification = 0;
+    private $quickPoints;
 
     /**
      * @var int
@@ -46,12 +53,27 @@ class CategoryProgress
     private $submissions = 0;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="required", type="integer")
+     */
+    private $required = 0;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="unread", type="integer")
+     */
+    private $unread = 0;
+
+    /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="categoryProgresses")
      */
     protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="AssignmentBundle\Entity\Category", inversedBy="categoryProgresses")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $category;
 
@@ -183,5 +205,77 @@ class CategoryProgress
     public function getSubmissions()
     {
         return $this->submissions;
+    }
+
+    /**
+     * Set unread
+     *
+     * @param integer $unread
+     *
+     * @return CategoryProgress
+     */
+    public function setUnread($unread)
+    {
+        $this->unread = $unread;
+
+        return $this;
+    }
+
+    /**
+     * Get unread
+     *
+     * @return integer
+     */
+    public function getUnread()
+    {
+        return $this->unread;
+    }
+
+    /**
+     * Set quickPoints
+     *
+     * @param integer $quickPoints
+     *
+     * @return CategoryProgress
+     */
+    public function setQuickPoints($quickPoints)
+    {
+        $this->quickPoints = $quickPoints;
+
+        return $this;
+    }
+
+    /**
+     * Get quickPoints
+     *
+     * @return integer
+     */
+    public function getQuickPoints()
+    {
+        return $this->quickPoints;
+    }
+
+    /**
+     * Set required
+     *
+     * @param integer $required
+     *
+     * @return CategoryProgress
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+
+        return $this;
+    }
+
+    /**
+     * Get required
+     *
+     * @return integer
+     */
+    public function getRequired()
+    {
+        return $this->required;
     }
 }

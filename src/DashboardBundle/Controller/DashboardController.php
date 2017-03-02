@@ -3,6 +3,8 @@
 namespace DashboardBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use DashboardBundle\Entity\Dashboard;
 use UserBundle\Entity\User;
@@ -32,9 +34,10 @@ class DashboardController extends Controller
     }
 
     /**
-     * @Route("/view/{courseid}", name="dash_view")
+     * Displays a student Dashboard
+     * @Route("/studentview/{courseid}", name="student_dash_view")
      */
-    public function viewAction($courseid)
+    public function studentViewAction($courseid)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
         $course = $this->getDoctrine()->getRepository('CourseBundle:Course')->find($courseid);
@@ -59,34 +62,62 @@ class DashboardController extends Controller
 
         }
 
-        //if a faculty dash, get all dashboards of all enrolled students
-        if($dash->getRole() == $dash::ROLE_INSTRUCTOR) {
-            $dashList = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findBy(array('course' => $course, 'role' => array(0, 1)));
-            $newSubmissionsList = array();
-            foreach($dashList as $userdash){
-                foreach($userdash->getUser()->getSubmissions() as $submission){
-                    if($submission->getPoints() == null){
-                        $newSubmissionsList[] = $submission;
-                    }
-                }
-            }
-            $catProgressList = null;
-            $totalScore = null;
+        $catProgressList = array();
+        $totalScore = 0;
+        foreach($user->getCategoryProgresses() as $catprogress){
+            $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
+            $totalScore = $totalScore + $catprogress->getPointsEarned();
         }
-        else{
-            $newSubmissionsList = null;
-            $dashList = null;
-            $catProgressList = array();
+
+        return $this->render('DashboardBundle:Default:studentview.html.twig', array('dash'=>$dash, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore));
+    }
+
+    /**
+     * Displays an instructor dashboard
+     * @Route("/instrview/{courseid}", name="instr_dash_view")
+     */
+    public function instrViewAction($courseid)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $course = $this->getDoctrine()->getRepository('CourseBundle:Course')->find($courseid);
+
+        if($user != $course->getOwner()){
+            throw new AccessDeniedException('You are not the instructor of this course');
+        }
+
+        $dash = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findOneBy(array('user' => $user, 'course' => $course));
+
+        if($dash == null){
+            $dash = new Dashboard();
+            $dash->setCourse($course);
+            $dash->setUser($user);
+            if($course->getOwner() == $user){
+                $dash->setRole($dash::ROLE_INSTRUCTOR);
+            }
+            else {
+                $dash->setRole($dash::ROLE_STUDENT);
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($dash);
+            $em->flush();
+
+        }
+
+        $dashList = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findBy(array('course' => $course, 'role' => array(0, 1)));
+        $totalProgressList = array();
+        foreach($dashList as $userdash){
             $totalScore = 0;
-            foreach($user->getCategoryProgresses() as $catprogress){
-                $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
-                $totalScore = $totalScore + $catprogress->getPointsEarned();
+            $userProgressList = array();
+            foreach($userdash->getUser()->getcategoryProgresses() as $progress){
+                $userProgressList[$progress->getCategory()->getId()] = $progress;
+                $totalScore = $totalScore + $progress->getPointsEarned();
             }
-
+            $userInfo= array('totalScore' => $totalScore, 'progressList' => $userProgressList);
+            $totalProgressList[$userdash->getUser()->getId()] = $userInfo;
         }
 
+        return $this->render('DashboardBundle:Default:instrview.html.twig', array('dash'=>$dash, 'dashlist'=>$dashList, 'progresslist'=>$totalProgressList ));
 
-        return $this->render('DashboardBundle:Default:view.html.twig', array('dash'=>$dash, 'dashlist'=>$dashList, 'newsubmissionlist'=>$newSubmissionsList, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore));
     }
 
     /**

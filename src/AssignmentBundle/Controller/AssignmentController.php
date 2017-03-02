@@ -92,13 +92,9 @@ class AssignmentController extends Controller
             $category = $form->getData();
 
             //Add max points from this category to course max points
-            $course = $category->getCourse();
-            $currentPoints = $course->getMaxPoints();
-            $course->setMaxPoints($currentPoints + $category->getMaxPoints());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($category);
-            $em->persist($course);
 
             $dashList = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findBy(array('course' => $course, 'role' => array(0, 1)));
             if($dashList) {
@@ -227,5 +223,29 @@ class AssignmentController extends Controller
         $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
 
         return $this->render('AssignmentBundle:Category:viewmodal.html.twig', array('category' => $category));
+    }
+
+    /**
+     * Delete a category
+     *
+     * @Route("/delete_category/{categoryid}", name="category_delete")
+     */
+    public function deleteCategoryAction($categoryid, Request $request)
+    {
+        $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
+
+        $form = $this->createFormBuilder()->add('Delete', SubmitType::class)->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()){
+            $courseid = $category->getCourse()->getId();
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($category);
+            $em->flush();
+            return $this->redirectToRoute('course_view', array('courseid' => $courseid));
+        }
+
+        return $this->render('AssignmentBundle:Category:deletemodal.html.twig', array('category' => $category, 'form' => $form->createView()));
     }
 }

@@ -1,46 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
-        {# if the dash role is 2, display the instructor dashboard #}
-    {% if dash.role == 2 %}
-        <div class="row">
-        <div class="col-md-12">
-            <h1>My Instructor's Dashboard for {{ dash.course.name }}</h1>
-            <h2>Enrolled Students</h2>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Student Name</th>
-                    {% for category in dash.course.categories %}
-                    <th>{{ category.name }}</th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for dashboard in dashlist if dashboard.role == 1%}
-                <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td>
-                {% for category in dash.course.categories %}
-                    <td>
-                        {% for submission in newsubmissionlist if submission.user == dashboard.user and submission.assignment.category == category %}
-                            <a href="javascript:void(0);" data-id="{{ submission.id }}" class="btn btn-primary evaluateAssignment">Evaluate {{ submission.assignment.name }} submission</a> <br>
-                        {% endfor %}
-                    </td>
-                {% endfor %}
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <h2>Pending Students</h2>
-            <table>
-                {% for dashboard in dashlist if dashboard.role == 0%}
-                    <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td><td><a href="{{ path('approve_student', {'userid':dashboard.user.id, 'courseid':dashboard.course.id}) }}">Enroll Student</a></td></tr>
-                {% endfor %}
-            </table>
-        </div>
-        </div>
-        {% endif %}
-        {# end of instructor dashboard#}
-
         {# if the dash role is 1, display the student dashboard #}
         {% if dash.role == 1 %}
         <div class="row">
@@ -144,13 +104,6 @@
             var catId = $(this).data('id');
             var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
             url = url.replace( "catId", catId );
-            $('#submitModal').load(url);
-        });
-
-        $('.evaluateAssignment').click( function() {
-            var submissionId = $(this).data('id');
-            var url="{{ path( 'submission_evaluate', { 'submissionid':'submitId'}) }}";
-            url = url.replace( "submitId", submissionId );
             $('#submitModal').load(url);
         });
 

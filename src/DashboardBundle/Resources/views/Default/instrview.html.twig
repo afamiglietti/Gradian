@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+
+        <div class="row">
+        <div class="col-md-12">
+            <h1>My Instructor's Dashboard for {{ dash.course.name }}</h1>
+            <h2>Enrolled Students</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Class Score</th>
+                    {% for category in dash.course.categories %}
+                    <th scope="col" colspan="2">{{ category.name }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for dashboard in dashlist if dashboard.role == 1%}
+                <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td>
+                    <td>{{ progresslist[dashboard.user.id]['totalScore'] }}</td>
+                {% for category in dash.course.categories %}
+                    <td>
+                        <ul>
+                            <li>Points earned: {{ progresslist[dashboard.user.id]['progressList'][category.id].pointsEarned }}</li>
+                            <li>Submitted: <span class="badge">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</span></li>
+                            <li>Unreviewed: {% if progresslist[dashboard.user.id]['progressList'][category.id].unread > 0 %} <a href="javascript:void(0);" class="evaluateUnread badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}"> {{ progresslist[dashboard.user.id]['progressList'][category.id].unread }}</a>{% endif %}</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="" class="btn btn-primary btn-block">Quick Points</a>
+                        <a href="" class="btn btn-info btn-block">Notify</a>
+                    </td>
+                {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <h2>Pending Students</h2>
+            <table>
+                {% for dashboard in dashlist if dashboard.role == 0%}
+                    <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td><td><a href="{{ path('approve_student', {'userid':dashboard.user.id, 'courseid':dashboard.course.id}) }}">Enroll Student</a></td></tr>
+                {% endfor %}
+            </table>
+        </div>
+        </div>
+
+        {# end of instructor dashboard#}
+
+    <div id="submitModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+
+    <div id="catModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script language="JavaScript">
+    $(document).ready(function() {
+
+        $('#calendar').fullCalendar({
+        });
+
+        $('.submitAssignment').click( function() {
+            var catId = $(this).data('id');
+            var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
+            url = url.replace( "catId", catId );
+            $('#submitModal').load(url);
+        });
+
+
+        $('.evaluateUnread').click( function() {
+            var userId = $(this).data('uid');
+            var catId = $(this).data('cid');
+            var url="{{ path( 'unread_evaluate', { 'userid':'userId', 'categoryid' : 'catId' } )}}";
+            url = url.replace( "userId", userId );
+            url = url.replace("catId", catId);
+            $('#submitModal').load(url);
+        });
+
+        $('.viewCategory').click( function() {
+            var catId = $(this).data('id');
+            var url="{{ path( 'category_view_modal', { 'categoryid':'catId'}) }}";
+            url = url.replace( "catId", catId );
+            $('#catModal').load(url);
+        });
+
+    });
+
+</script>
+{% endblock %}

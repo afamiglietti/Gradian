@@ -29,6 +29,8 @@ class Category
     private $name;
 
     /**
+     * The points field tracks the number of points AVAILABLE in the category, based on all the points that can be earned in all the assignments.
+     *
      * @var int
      *
      * @ORM\Column(name="points", type="integer")
@@ -36,6 +38,8 @@ class Category
     private $points = 0;
 
     /**
+     * The max points field tracks the maximum number of points the student can earn towards the course score in this category, regardless of the number of points available
+     *
      * @var int
      *
      * @ORM\Column(name="max_points", type="integer")

@@ -70,6 +70,7 @@ class Submission
 
     /**
      * @ORM\ManyToOne(targetEntity="AssignmentBundle\Entity\Assignment", inversedBy="submissions")
+     * @ORM\JoinColumn(name="assignment_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $assignment;
 
