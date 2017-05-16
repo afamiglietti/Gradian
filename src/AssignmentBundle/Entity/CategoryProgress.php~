@@ -31,12 +31,13 @@ class CategoryProgress
      */
     private $pointsEarned = 0;
 
+
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="notification", type="string", length=255)
+     * @ORM\Column(name="unread_notification", type="integer")
      */
-    private $notification;
+    private $unreadNotifications = 0;
 
     /**
      * @var int
@@ -76,6 +77,12 @@ class CategoryProgress
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AssignmentBundle\Entity\Notification", mappedBy="categoryProgress")
+     *
+     */
+    protected $notifications;
 
     /**
      * Get id
@@ -229,5 +236,77 @@ class CategoryProgress
     public function getUnread()
     {
         return $this->unread;
+    }
+
+    /**
+     * Set quickPoints
+     *
+     * @param integer $quickPoints
+     *
+     * @return CategoryProgress
+     */
+    public function setQuickPoints($quickPoints)
+    {
+        $this->quickPoints = $quickPoints;
+
+        return $this;
+    }
+
+    /**
+     * Get quickPoints
+     *
+     * @return integer
+     */
+    public function getQuickPoints()
+    {
+        return $this->quickPoints;
+    }
+
+    /**
+     * Set required
+     *
+     * @param integer $required
+     *
+     * @return CategoryProgress
+     */
+    public function setRequired($required)
+    {
+        $this->required = $required;
+
+        return $this;
+    }
+
+    /**
+     * Get required
+     *
+     * @return integer
+     */
+    public function getRequired()
+    {
+        return $this->required;
+    }
+
+    /**
+     * Set unreadNotification
+     *
+     * @param boolean $unreadNotification
+     *
+     * @return CategoryProgress
+     */
+    public function setUnreadNotification($unreadNotification)
+    {
+        $this->unreadNotification = $unreadNotification;
+
+        return $this;
+    }
+
+    /**
+     * Get unreadNotification
+     *
+     * @return boolean
+     */
+    public function getUnreadNotification()
+    {
+        return $this->unreadNotification;
     }
 }

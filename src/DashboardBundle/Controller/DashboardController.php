@@ -13,6 +13,7 @@ use AssignmentBundle\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 /**
@@ -111,6 +112,7 @@ class DashboardController extends Controller
             foreach($userdash->getUser()->getcategoryProgresses() as $progress){
                 $userProgressList[$progress->getCategory()->getId()] = $progress;
                 $totalScore = $totalScore + $progress->getPointsEarned();
+                $totalScore = $totalScore + $progress->getQuickPoints();
             }
             $userInfo= array('totalScore' => $totalScore, 'progressList' => $userProgressList);
             $totalProgressList[$userdash->getUser()->getId()] = $userInfo;
@@ -194,7 +196,39 @@ class DashboardController extends Controller
         $em->persist($dash);
         $em->flush();
 
-        return $this->redirectToRoute('dash_view', array('courseid' => $courseid));
+        return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseid));
+    }
+
+    /**
+     * Add quick points from the dashboard
+     *
+     * @Route("/add_quickpoints/{categoryprogressid}", name="add_quickpoints")
+     */
+    public function addQuickpointsAction($categoryprogressid, Request $request)
+    {
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
+        $courseId = $categoryProgress->getCategory()->getCourse()->getId();
+
+        $defaultData = array('quickPoints' => $categoryProgress->getQuickPoints());
+
+        $form = $this->createFormBuilder($defaultData)
+            ->add('quickPoints', IntegerType::class)
+            ->add('update', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+            $data = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $categoryProgress->setQuickPoints($data['quickPoints']);
+            $em->persist($categoryProgress);
+            $em->flush();
+
+            return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseId));
+        }
+
+        return $this->render('DashboardBundle:Default:quickpoints.html.twig', array ('form' => $form->createView(), 'categoryprogressid' => $categoryprogressid));
     }
 
 }

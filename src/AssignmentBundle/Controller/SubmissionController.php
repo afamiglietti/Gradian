@@ -78,7 +78,30 @@ class SubmissionController extends Controller
 
         $submissions = $repository->findBy(array('user' => $userid, 'assignment' => $assignmentIds, 'points' => null));
 
-        return $this->render('AssignmentBundle:Submission:unreadevaluate.html.twig', array('submissions' =>$submissions));
+        return $this->render('AssignmentBundle:Submission:choosesubmission.html.twig', array('submissions' =>$submissions));
+    }
+
+    /**
+     * Return a list of already evaluated submissions so the instructor can choose to edit one
+     *
+     * @Route("/readevaluate/{userid}/{categoryid}", name="read_evaluate")
+     */
+    public function readEvalAction($userid, $categoryid){
+
+        $catRepository = $this->getDoctrine()->getRepository('AssignmentBundle:Category');
+
+        $category = $catRepository->find($categoryid);
+        $assignments = $category->getAssignments();
+        $assignmentIds = array();
+        foreach($assignments as $assignment){
+            $assignmentIds[] = $assignment -> getId();
+        }
+
+        $repository = $this->getDoctrine()->getRepository('AssignmentBundle:Submission');
+
+        $submissions = $repository->findBy(array('user' => $userid, 'assignment' => $assignmentIds));
+
+        return $this->render('AssignmentBundle:Submission:choosesubmission.html.twig', array('submissions' =>$submissions));
     }
 
     /**
@@ -95,6 +118,9 @@ class SubmissionController extends Controller
 
         if($submission->getPoints() === null){
             $newSubmit = true;
+        }
+        else {
+            $newSubmit = false;
         }
 
         $form = $this->createForm(EvaluateSubmissionType::class, $submission);
@@ -118,7 +144,7 @@ class SubmissionController extends Controller
             $em->persist($categoryProgress);
             $em->persist($submission);
             $em->flush();
-            return $this->redirectToRoute('dash_view', array('courseid' => $submission->getAssignment()->getCourse()->getId()));
+            return $this->redirectToRoute('instr_dash_view', array('courseid' => $submission->getAssignment()->getCourse()->getId()));
         }
 
         return $this->render('AssignmentBundle:Submission:evaluate.html.twig', array('form' => $form->createView(), 'submission' =>$submission));

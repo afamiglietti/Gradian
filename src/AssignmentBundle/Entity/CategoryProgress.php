@@ -31,12 +31,13 @@ class CategoryProgress
      */
     private $pointsEarned = 0;
 
+
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="notification", type="string", length=255)
+     * @ORM\Column(name="unread_notification", type="integer")
      */
-    private $notification;
+    private $unreadNotifications = 0;
 
     /**
      * @var int
@@ -76,6 +77,12 @@ class CategoryProgress
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AssignmentBundle\Entity\Notification", mappedBy="categoryProgress")
+     *
+     */
+    protected $notifications;
 
     /**
      * Get id
@@ -277,5 +284,94 @@ class CategoryProgress
     public function getRequired()
     {
         return $this->required;
+    }
+
+    /**
+     * Set unreadNotification
+     *
+     * @param boolean $unreadNotification
+     *
+     * @return CategoryProgress
+     */
+    public function setUnreadNotification($unreadNotification)
+    {
+        $this->unreadNotification = $unreadNotification;
+
+        return $this;
+    }
+
+    /**
+     * Get unreadNotification
+     *
+     * @return boolean
+     */
+    public function getUnreadNotification()
+    {
+        return $this->unreadNotification;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set unreadNotifications
+     *
+     * @param integer $unreadNotifications
+     *
+     * @return CategoryProgress
+     */
+    public function setUnreadNotifications($unreadNotifications)
+    {
+        $this->unreadNotifications = $unreadNotifications;
+
+        return $this;
+    }
+
+    /**
+     * Get unreadNotifications
+     *
+     * @return integer
+     */
+    public function getUnreadNotifications()
+    {
+        return $this->unreadNotifications;
+    }
+
+    /**
+     * Add notification
+     *
+     * @param \AssignmentBundle\Entity\Notification $notification
+     *
+     * @return CategoryProgress
+     */
+    public function addNotification(\AssignmentBundle\Entity\Notification $notification)
+    {
+        $this->notifications[] = $notification;
+
+        return $this;
+    }
+
+    /**
+     * Remove notification
+     *
+     * @param \AssignmentBundle\Entity\Notification $notification
+     */
+    public function removeNotification(\AssignmentBundle\Entity\Notification $notification)
+    {
+        $this->notifications->removeElement($notification);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
     }
 }

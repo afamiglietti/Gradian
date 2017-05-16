@@ -23,13 +23,13 @@
                 {% for category in dash.course.categories %}
                     <td>
                         <ul>
-                            <li>Points earned: {{ progresslist[dashboard.user.id]['progressList'][category.id].pointsEarned }}</li>
-                            <li>Submitted: <span class="badge">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</span></li>
+                            <li>Points earned: {{ progresslist[dashboard.user.id]['progressList'][category.id].pointsEarned +  progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</li>
+                            <li>Submitted: {% if progresslist[dashboard.user.id]['progressList'][category.id].submissions > 0 %}<a href="javascript:void(0);" class="evaluateRead badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</a>{% endif %}</li>
                             <li>Unreviewed: {% if progresslist[dashboard.user.id]['progressList'][category.id].unread > 0 %} <a href="javascript:void(0);" class="evaluateUnread badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}"> {{ progresslist[dashboard.user.id]['progressList'][category.id].unread }}</a>{% endif %}</li>
                         </ul>
                     </td>
                     <td>
-                        <a href="" class="btn btn-primary btn-block">Quick Points</a>
+                        <a href="javascript:void(0);" class="btn btn-primary btn-block quickpts" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">Quick Points: {{ progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</a>
                         <a href="" class="btn btn-info btn-block">Notify</a>
                     </td>
                 {% endfor %}
@@ -81,12 +81,29 @@
             $('#submitModal').load(url);
         });
 
+        $('.evaluateRead').click( function() {
+            var userId = $(this).data('uid');
+            var catId = $(this).data('cid');
+            var url="{{ path( 'read_evaluate', { 'userid':'userId', 'categoryid' : 'catId' } )}}";
+            url = url.replace( "userId", userId );
+            url = url.replace("catId", catId);
+            $('#submitModal').load(url);
+        });
+
         $('.viewCategory').click( function() {
             var catId = $(this).data('id');
             var url="{{ path( 'category_view_modal', { 'categoryid':'catId'}) }}";
             url = url.replace( "catId", catId );
             $('#catModal').load(url);
         });
+
+        $('.quickpts').click( function() {
+            var catProgId = $(this).data('id');
+            var url="{{ path( 'add_quickpoints', { 'categoryprogressid':'catProgId'}) }}";
+            url = url.replace( "catProgId", catProgId );
+            $('#submitModal').load(url);
+        });
+
 
     });
 
