@@ -47,6 +47,33 @@ class Category
     private $maxPoints;
 
     /**
+     * The max score earned field tracks the maximum score earned by any student to date in this category
+     *
+     * @var int
+     *
+     * @ORM\Column(name="max_score_earned", type="integer")
+     */
+    private $maxScoreEarned = 0;
+
+    /**
+     * The median score earned field tracks the median of all scores earned by students to date in this category
+     *
+     * @var int
+     *
+     * @ORM\Column(name="median_score_earned", type="integer")
+     */
+    private $medianScoreEarned = 0;
+
+    /**
+     * The min score earned field tracks the minimum score earned by any student to date in this category
+     *
+     * @var int
+     *
+     * @ORM\Column(name="min_score_earned", type="integer")
+     */
+    private $minScoreEarned = 0;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="active", type="boolean")
@@ -367,5 +394,77 @@ class Category
     public function getCategoryProgresses()
     {
         return $this->categoryProgresses;
+    }
+
+    /**
+     * Set maxScoreEarned
+     *
+     * @param integer $maxScoreEarned
+     *
+     * @return Category
+     */
+    public function setMaxScoreEarned($maxScoreEarned)
+    {
+        $this->maxScoreEarned = $maxScoreEarned;
+
+        return $this;
+    }
+
+    /**
+     * Get maxScoreEarned
+     *
+     * @return integer
+     */
+    public function getMaxScoreEarned()
+    {
+        return $this->maxScoreEarned;
+    }
+
+    /**
+     * Set medianScoreEarned
+     *
+     * @param integer $medianScoreEarned
+     *
+     * @return Category
+     */
+    public function setMedianScoreEarned($medianScoreEarned)
+    {
+        $this->medianScoreEarned = $medianScoreEarned;
+
+        return $this;
+    }
+
+    /**
+     * Get medianScoreEarned
+     *
+     * @return integer
+     */
+    public function getMedianScoreEarned()
+    {
+        return $this->medianScoreEarned;
+    }
+
+    /**
+     * Set minScoreEarned
+     *
+     * @param integer $minScoreEarned
+     *
+     * @return Category
+     */
+    public function setMinScoreEarned($minScoreEarned)
+    {
+        $this->minScoreEarned = $minScoreEarned;
+
+        return $this;
+    }
+
+    /**
+     * Get minScoreEarned
+     *
+     * @return integer
+     */
+    public function getMinScoreEarned()
+    {
+        return $this->minScoreEarned;
     }
 }

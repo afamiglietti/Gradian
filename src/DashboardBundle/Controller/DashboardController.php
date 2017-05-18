@@ -10,6 +10,8 @@ use DashboardBundle\Entity\Dashboard;
 use UserBundle\Entity\User;
 use AssignmentBundle\Entity\CategoryProgress;
 use AssignmentBundle\Entity\Category;
+use AssignmentBundle\Entity\Notification;
+use AssignmentBundle\Form\NotificationType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -220,8 +222,17 @@ class DashboardController extends Controller
 
         if($form->isSubmitted()){
             $data = $form->getData();
+            $quickPoints = $data['quickPoints'];
+
+            //clear old quick points from current point total, then add new quick point figure
+            $currentPoints = $categoryProgress->getPointsEarned();
+            $currentPoints = $currentPoints - $categoryProgress->getQuickPoints();
+            $currentPoints = $currentPoints + $quickPoints;
+
+            $categoryProgress->setPointsEarned($currentPoints);
+            $categoryProgress->setQuickPoints($quickPoints);
+
             $em = $this->getDoctrine()->getManager();
-            $categoryProgress->setQuickPoints($data['quickPoints']);
             $em->persist($categoryProgress);
             $em->flush();
 
@@ -229,6 +240,54 @@ class DashboardController extends Controller
         }
 
         return $this->render('DashboardBundle:Default:quickpoints.html.twig', array ('form' => $form->createView(), 'categoryprogressid' => $categoryprogressid));
+    }
+
+    /**
+     * Notify a Student
+     *
+     * @Route("/create_notification/{categoryprogressid}", name="create_notification")
+     */
+    public function createNotificationAction($categoryprogressid, Request $request)
+    {
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
+        $courseId = $categoryProgress->getCategory()->getCourse()->getId();
+
+        $notification = new Notification();
+
+        $notification->setCategoryProgress($categoryProgress);
+
+        $form = $this->createForm(NotificationType::class, $notification);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $notification = $form->getData();
+
+            $notification->setDateCreated(new \DateTime());
+            $currentUnread = $categoryProgress->getUnreadNotifications();
+            $categoryProgress->setUnreadNotifications($currentUnread + 1);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($notification);
+            $em->persist($categoryProgress);
+            $em->flush();
+
+            return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseId));
+
+        }
+
+        return $this->render('DashboardBundle:Default:notify.html.twig', array ('form' => $form->createView(), 'categoryprogressid' => $categoryprogressid));
+    }
+
+    /**
+     * View Student Notifications
+     *
+     * @Route("/view_notifications/{categoryprogressid}", name="view_notifications_by_category")
+     */
+    public function viewNotificationsByCategoryAction($categoryprogressid)
+    {
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
+        $notifications = $categoryProgress->getNotifications();
+
+        return $this->render('DashboardBundle:Default:notificationsByCategory.html.twig', array('notifications' => $notifications));
     }
 
 }

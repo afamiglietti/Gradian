@@ -16,9 +16,9 @@
             <p><strong>Worth: {{ category.maxpoints }}</strong></p>
             <h4>Assignments</h4>
             <table class="table table-striped">
-                <tr><th>Name:</th><th>Due Date:</th><th>Required?</th></tr>
+                <tr><th>Name:</th><th>Rubric</th><th>Due Date:</th><th>Required?</th></tr>
                 {% for assignment in category.assignments %}
-                    <tr><td>{{ assignment.name }}</td><td>{{ assignment.duedate|date('m-D-Y') }}</td><td>{% if assignment.required %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td></tr>
+                    <tr><td>{{ assignment.name }}</td><td>{% if assignment.rubricLink %}<a href="{{ assignment.rubricLink }}" target="_blank">Rubric</a>{% endif %}</td><td>{{ assignment.duedate|date('m-D-Y') }}</td><td>{% if assignment.required %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td></tr>
                 {% endfor %}
             </table>
 

@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Notification
 {
+    //Using constants to define set message types, we may want dynamic types later but that will have to wait
+    const MISSING_WORK = 0;
+    const GOOD_WORK = 1;
+    const CHECK_FEEDBACK = 2;
+    const OTHER = 3;
+
     /**
      * @var int
      *

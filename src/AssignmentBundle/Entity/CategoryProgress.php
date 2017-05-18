@@ -286,29 +286,7 @@ class CategoryProgress
         return $this->required;
     }
 
-    /**
-     * Set unreadNotification
-     *
-     * @param boolean $unreadNotification
-     *
-     * @return CategoryProgress
-     */
-    public function setUnreadNotification($unreadNotification)
-    {
-        $this->unreadNotification = $unreadNotification;
 
-        return $this;
-    }
-
-    /**
-     * Get unreadNotification
-     *
-     * @return boolean
-     */
-    public function getUnreadNotification()
-    {
-        return $this->unreadNotification;
-    }
     /**
      * Constructor
      */

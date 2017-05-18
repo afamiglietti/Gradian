@@ -71,6 +71,13 @@ class Assignment
     private $instructions;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rubric_link", type="string", length=255, nullable=true)
+     */
+    private $rubricLink;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="active", type="datetime")

@@ -71,6 +71,13 @@ class Assignment
     private $instructions;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="rubric_link", type="string", length=255, nullable=true)
+     */
+    private $rubricLink;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="active", type="datetime")
@@ -439,5 +446,29 @@ class Assignment
     public function getMaxSubmissions()
     {
         return $this->maxSubmissions;
+    }
+
+    /**
+     * Set rubricLink
+     *
+     * @param string $rubricLink
+     *
+     * @return Assignment
+     */
+    public function setRubricLink($rubricLink)
+    {
+        $this->rubricLink = $rubricLink;
+
+        return $this;
+    }
+
+    /**
+     * Get rubricLink
+     *
+     * @return string
+     */
+    public function getRubricLink()
+    {
+        return $this->rubricLink;
     }
 }

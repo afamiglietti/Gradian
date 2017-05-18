@@ -106,6 +106,33 @@ class Course
     private $gradeD = 0;
 
     /**
+     * The max score earned field tracks the maximum score earned by any student to date in this course
+     *
+     * @var int
+     *
+     * @ORM\Column(name="max_score_earned", type="integer")
+     */
+    private $maxScoreEarned = 0;
+
+    /**
+     * The median score earned field tracks the median of all scores earned by students to date in this course
+     *
+     * @var int
+     *
+     * @ORM\Column(name="median_score_earned", type="integer")
+     */
+    private $medianScoreEarned = 0;
+
+    /**
+     * The min score earned field tracks the minimum score earned by any student to date in this course
+     *
+     * @var int
+     *
+     * @ORM\Column(name="min_score_earned", type="integer")
+     */
+    private $minScoreEarned = 0;
+
+    /**
      * A deleted field marks deleted courses
      * They aren't deleted, of course, just hidden. Actual deletion to be carried out by an admin
      *
@@ -468,5 +495,101 @@ class Course
     public function getMaxPoints()
     {
         return $this->maxPoints;
+    }
+
+    /**
+     * Set gradeA
+     *
+     * @param integer $gradeA
+     *
+     * @return Course
+     */
+    public function setGradeA($gradeA)
+    {
+        $this->gradeA = $gradeA;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeA
+     *
+     * @return integer
+     */
+    public function getGradeA()
+    {
+        return $this->gradeA;
+    }
+
+    /**
+     * Set gradeB
+     *
+     * @param integer $gradeB
+     *
+     * @return Course
+     */
+    public function setGradeB($gradeB)
+    {
+        $this->gradeB = $gradeB;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeB
+     *
+     * @return integer
+     */
+    public function getGradeB()
+    {
+        return $this->gradeB;
+    }
+
+    /**
+     * Set gradeC
+     *
+     * @param integer $gradeC
+     *
+     * @return Course
+     */
+    public function setGradeC($gradeC)
+    {
+        $this->gradeC = $gradeC;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeC
+     *
+     * @return integer
+     */
+    public function getGradeC()
+    {
+        return $this->gradeC;
+    }
+
+    /**
+     * Set gradeD
+     *
+     * @param integer $gradeD
+     *
+     * @return Course
+     */
+    public function setGradeD($gradeD)
+    {
+        $this->gradeD = $gradeD;
+
+        return $this;
+    }
+
+    /**
+     * Get gradeD
+     *
+     * @return integer
+     */
+    public function getGradeD()
+    {
+        return $this->gradeD;
     }
 }

@@ -12,31 +12,37 @@
                     <th>Student Name</th>
                     <th>Class Score</th>
                     {% for category in dash.course.categories %}
-                    <th scope="col" colspan="2">{{ category.name }}</th>
+                    <th scope="col" colspan="2"><a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}">{{ category.name }}</a></th>
                     {% endfor %}
                 </tr>
                 </thead>
                 <tbody>
                 {% for dashboard in dashlist if dashboard.role == 1%}
-                <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}</td>
+                <tr><td>{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}<br> <span class="glyphicon glyphicon-pencil"></span> <span class="glyphicon glyphicon-link"></span><br>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-info">Update Feedback Link</a>
+                    </td>
                     <td>{{ progresslist[dashboard.user.id]['totalScore'] }}</td>
                 {% for category in dash.course.categories %}
                     <td>
-                        <ul>
-                            <li>Points earned: {{ progresslist[dashboard.user.id]['progressList'][category.id].pointsEarned +  progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</li>
-                            <li>Submitted: {% if progresslist[dashboard.user.id]['progressList'][category.id].submissions > 0 %}<a href="javascript:void(0);" class="evaluateRead badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</a>{% endif %}</li>
-                            <li>Unreviewed: {% if progresslist[dashboard.user.id]['progressList'][category.id].unread > 0 %} <a href="javascript:void(0);" class="evaluateUnread badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}"> {{ progresslist[dashboard.user.id]['progressList'][category.id].unread }}</a>{% endif %}</li>
+                        <ul class="list-group">
+                            <li class="list-group-item">Points earned: {{ progresslist[dashboard.user.id]['progressList'][category.id].pointsEarned }}</li>
+                            <li class="list-group-item">Submitted: {% if progresslist[dashboard.user.id]['progressList'][category.id].submissions > 0 %}<a href="javascript:void(0);" class="evaluateRead badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</a>{% endif %}</li>
+                            <li class="list-group-item">Unreviewed: {% if progresslist[dashboard.user.id]['progressList'][category.id].unread > 0 %} <a href="javascript:void(0);" class="evaluateUnread badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}"> {{ progresslist[dashboard.user.id]['progressList'][category.id].unread }}</a>{% endif %}</li>
                         </ul>
                     </td>
                     <td>
-                        <a href="javascript:void(0);" class="btn btn-primary btn-block quickpts" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">Quick Points: {{ progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</a>
-                        <a href="" class="btn btn-info btn-block">Notify</a>
+                        <ul class="list-group">
+                            <li class="list-group-item">Quick Points: <a href="javascript:void(0);" class="quickpts badge" role="button" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</a></li>
+                            <li class="list-group-item">Notifications: <a href="javascript:void(0);" class="badge notify_catview" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].notifications|length }}</a> <a href="javascript:void(0);" class="btn btn-info btn-xs notify" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">Notify</a></li>
+                        </ul>
+
                     </td>
                 {% endfor %}
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
+
             <h2>Pending Students</h2>
             <table>
                 {% for dashboard in dashlist if dashboard.role == 0%}
@@ -53,6 +59,10 @@
     </div>
 
     <div id="catModal" class="modal fade" tabindex="-1" role="dialog">
+
+    </div>
+
+    <div id="reviewModal" class="modal fade" tabindex="-1" role="dialog">
 
     </div>
 {% endblock %}
@@ -104,6 +114,19 @@
             $('#submitModal').load(url);
         });
 
+        $('.notify').click( function() {
+            var catProgId = $(this).data('id');
+            var url="{{ path( 'create_notification', { 'categoryprogressid':'catProgId'}) }}";
+            url = url.replace( "catProgId", catProgId );
+            $('#submitModal').load(url);
+        });
+
+        $('.notify_catview').click( function() {
+            var catProgId = $(this).data('id');
+            var url="{{ path( 'view_notifications_by_category', { 'categoryprogressid':'catProgId'}) }}";
+            url = url.replace( "catProgId", catProgId );
+            $('#reviewModal').load(url);
+        });
 
     });
 
