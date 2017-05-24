@@ -115,12 +115,14 @@ class SubmissionController extends Controller
 
         $course = $submission->getAssignment()->getCourse();
         $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('user' => $submission->getUser(), 'category' => $submission->getAssignment()->getCategory()));
+        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findOneBy(array('user' => $submission->getUser(), 'course' => $course));
 
         if($submission->getPoints() === null){
             $newSubmit = true;
         }
         else {
             $newSubmit = false;
+            $oldPoints = $submission->getPoints();
         }
 
         $form = $this->createForm(EvaluateSubmissionType::class, $submission);
@@ -129,20 +131,31 @@ class SubmissionController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $submission = $form->getData();
 
-            $currentPoints = $course->getMaxPoints();
-            $course->setMaxpoints($currentPoints + $submission->getPoints());
-            $currentPoints = $categoryProgress->getPointsEarned();
-            $categoryProgress->setPointsEarned($currentPoints + $submission->getPoints());
-
             if($newSubmit){
                 $currentUnread = $categoryProgress->getUnread();
                 $categoryProgress->setUnread($currentUnread - 1);
+
+                $currentPoints = $categoryProgress->getPointsEarned();
+                $categoryProgress->setPointsEarned($currentPoints + $submission->getPoints());
+
+                $currentTotalPoints = $dashboard->getCourseScore();
+                $dashboard->setCourseScore($currentTotalPoints + $submission->getPoints());
+            }
+            else {
+                $currentPoints = $categoryProgress->getPointsEarned();
+                $currentPoints = $currentPoints - $oldPoints;
+                $categoryProgress->setPointsEarned($currentPoints + $submission->getPoints());
+
+                $currentTotalPoints = $dashboard->getCourseScore();
+                $currentTotalPoints = $currentTotalPoints - $oldPoints;
+                $dashboard->setCourseScore($currentTotalPoints + $submission->getPoints());
             }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($course);
             $em->persist($categoryProgress);
             $em->persist($submission);
+            $em->persist($dashboard);
             $em->flush();
             return $this->redirectToRoute('instr_dash_view', array('courseid' => $submission->getAssignment()->getCourse()->getId()));
         }

@@ -44,7 +44,7 @@ class CategoryProgress
      *
      * @ORM\Column(name="quickpoints", type="integer")
      */
-    private $quickPoints;
+    private $quickPoints = 0;
 
     /**
      * @var int

@@ -210,6 +210,7 @@ class DashboardController extends Controller
     {
         $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
         $courseId = $categoryProgress->getCategory()->getCourse()->getId();
+        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findOneBy(array('user' => $categoryProgress->getUser(), 'course' => $categoryProgress->getCategory()->getCourse()));
 
         $defaultData = array('quickPoints' => $categoryProgress->getQuickPoints());
 
@@ -229,11 +230,18 @@ class DashboardController extends Controller
             $currentPoints = $currentPoints - $categoryProgress->getQuickPoints();
             $currentPoints = $currentPoints + $quickPoints;
 
+            $currentTotalPoints = $dashboard->getCourseScore();
+            $currentTotalPoints = $currentTotalPoints - $categoryProgress->getQuickPoints();
+            $currentTotalPoints = $currentTotalPoints + $quickPoints;
+
             $categoryProgress->setPointsEarned($currentPoints);
             $categoryProgress->setQuickPoints($quickPoints);
 
+            $dashboard->setCourseScore($currentTotalPoints);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($categoryProgress);
+            $em->persist($dashboard);
             $em->flush();
 
             return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseId));
@@ -288,6 +296,41 @@ class DashboardController extends Controller
         $notifications = $categoryProgress->getNotifications();
 
         return $this->render('DashboardBundle:Default:notificationsByCategory.html.twig', array('notifications' => $notifications));
+    }
+
+    /**
+     * Recompute Course Statistics
+     *
+     * @Route("/recompute_course_stats/{courseid}", name="recompute_course_stats")
+     */
+    public function recomputeCourseStatsAction($courseid)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $course = $this->getDoctrine()->getRepository('CourseBundle:Course')->find($courseid);
+
+        if($user != $course->getOwner()){
+            throw new AccessDeniedException('You are not the instructor of this course');
+        }
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach($course->getCategories() as $category){
+            $catProgresses = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findBy(array('category' => $category), array('pointsEarned'=>'DESC'));
+            $category->setMaxScoreEarned($catProgresses[0]->getPointsEarned());
+            $category->setMinScoreEarned(end($catProgresses)->getPointsEarned());
+            $em->persist($category);
+        }
+
+        $dashList = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findBy(array('course' => $course, 'role' => 1), array('courseScore' => 'DESC'));
+
+        $course->setMaxScoreEarned($dashList[0]->getCourseScore());
+        $course->setMinScoreEarned(end($dashList)->getCourseScore());
+
+        $em->persist($course);
+
+        $em->flush();
+
+        return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseid));
     }
 
 }

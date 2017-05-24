@@ -12,3 +12,26 @@
     margin-bottom: 20px;
     border-bottom: solid 1px black;
 }
+
+.myprogress {
+    height: 20px;
+    background-color: #F07575;
+    background-image: linear-gradient(to right, red, blue, green);
+
+}
+
+.progressIndicator {
+    height: 20px;
+    border-right: 5px solid white;
+}
+
+.progressCaption {
+    position: relative;
+    left: -50px;
+    width: 100px;
+    text-align: center;
+}
+
+.notify {
+    width: 50%;
+}

@@ -32,6 +32,14 @@ class Dashboard
     private $role;
 
     /**
+     * The student's current score in the class. Tracked here to make course stats easier to compute
+     *
+     * @var int
+     * @ORM\Column(name="course_score", type="integer")
+     */
+    private $courseScore;
+
+    /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="dashboards")
      */
     protected $user;
@@ -98,5 +106,29 @@ class Dashboard
     public function getCourse()
     {
         return $this->course;
+    }
+
+    /**
+     * Set role
+     *
+     * @param integer $role
+     *
+     * @return Dashboard
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return integer
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

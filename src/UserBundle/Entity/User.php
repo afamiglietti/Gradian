@@ -35,12 +35,12 @@ class User extends BaseUser
     protected $lastname;
 
     /**
-     * @ORM\Column(name="feedback_link", type="string", length=255)
+     * @ORM\Column(name="feedback_link", type="string", length=255, nullable=true)
      */
     protected $feedbackLink;
 
     /**
-     * @ORM\Column(name="project_link", type="string", length=255)
+     * @ORM\Column(name="project_link", type="string", length=255, nullable=true)
      */
     protected $projectLink;
 

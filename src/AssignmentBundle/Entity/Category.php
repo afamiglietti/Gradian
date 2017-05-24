@@ -44,7 +44,7 @@ class Category
      *
      * @ORM\Column(name="max_points", type="integer")
      */
-    private $maxPoints;
+    private $maxPoints = 0;
 
     /**
      * The max score earned field tracks the maximum score earned by any student to date in this category
@@ -78,7 +78,7 @@ class Category
      *
      * @ORM\Column(name="active", type="boolean")
      */
-    private $active;
+    private $active = true;
 
     /**
      * @var string
