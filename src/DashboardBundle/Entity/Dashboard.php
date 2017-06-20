@@ -40,6 +40,22 @@ class Dashboard
     private $courseScore = 0;
 
     /**
+     * @var int
+     * @ORM\Column(name="quick_points", type="integer")
+     */
+    private $quickPoints = 0; 
+
+    /**
+     * @ORM\Column(name="feedback_link", type="string", length=255, nullable=true)
+     */
+    protected $feedbackLink;
+
+    /**
+     * @ORM\Column(name="project_link", type="string", length=255, nullable=true)
+     */
+    protected $projectLink;
+
+    /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="dashboards")
      */
     protected $user;
@@ -154,5 +170,77 @@ class Dashboard
     public function getCourseScore()
     {
         return $this->courseScore;
+    }
+
+    /**
+     * Set quickPoints
+     *
+     * @param integer $quickPoints
+     *
+     * @return Dashboard
+     */
+    public function setQuickPoints($quickPoints)
+    {
+        $this->quickPoints = $quickPoints;
+
+        return $this;
+    }
+
+    /**
+     * Get quickPoints
+     *
+     * @return integer
+     */
+    public function getQuickPoints()
+    {
+        return $this->quickPoints;
+    }
+
+    /**
+     * Set feedbackLink
+     *
+     * @param string $feedbackLink
+     *
+     * @return Dashboard
+     */
+    public function setFeedbackLink($feedbackLink)
+    {
+        $this->feedbackLink = $feedbackLink;
+
+        return $this;
+    }
+
+    /**
+     * Get feedbackLink
+     *
+     * @return string
+     */
+    public function getFeedbackLink()
+    {
+        return $this->feedbackLink;
+    }
+
+    /**
+     * Set projectLink
+     *
+     * @param string $projectLink
+     *
+     * @return Dashboard
+     */
+    public function setProjectLink($projectLink)
+    {
+        $this->projectLink = $projectLink;
+
+        return $this;
+    }
+
+    /**
+     * Get projectLink
+     *
+     * @return string
+     */
+    public function getProjectLink()
+    {
+        return $this->projectLink;
     }
 }

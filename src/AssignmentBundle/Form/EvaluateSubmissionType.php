@@ -24,7 +24,6 @@ class EvaluateSubmissionType extends AbstractType
         $builder
             ->add('points')
             ->add('feedbackComments')
-            ->add('feedbackLink')
             ->add('save', SubmitType::class, array('label' => 'Evaluate Submission'))
         ;
     }

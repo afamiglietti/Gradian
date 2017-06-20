@@ -37,7 +37,23 @@ class Dashboard
      * @var int
      * @ORM\Column(name="course_score", type="integer")
      */
-    private $courseScore;
+    private $courseScore = 0;
+
+    /**
+     * @var int
+     * @ORM\Column(name="quick_points", type="integer")
+     */
+    private $quickPoints = 0; 
+
+    /**
+     * @ORM\Column(name="feedback_link", type="string", length=255, nullable=true)
+     */
+    protected $feedbackLink;
+
+    /**
+     * @ORM\Column(name="project_link", type="string", length=255, nullable=true)
+     */
+    protected $projectLink;
 
     /**
      * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User", inversedBy="dashboards")
@@ -130,5 +146,29 @@ class Dashboard
     public function getRole()
     {
         return $this->role;
+    }
+
+    /**
+     * Set courseScore
+     *
+     * @param integer $courseScore
+     *
+     * @return Dashboard
+     */
+    public function setCourseScore($courseScore)
+    {
+        $this->courseScore = $courseScore;
+
+        return $this;
+    }
+
+    /**
+     * Get courseScore
+     *
+     * @return integer
+     */
+    public function getCourseScore()
+    {
+        return $this->courseScore;
     }
 }

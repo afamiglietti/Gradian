@@ -34,15 +34,7 @@ class User extends BaseUser
      */
     protected $lastname;
 
-    /**
-     * @ORM\Column(name="feedback_link", type="string", length=255)
-     */
-    protected $feedbackLink;
 
-    /**
-     * @ORM\Column(name="project_link", type="string", length=255)
-     */
-    protected $projectLink;
 
     /**
      * @ORM\OneToMany(targetEntity="CourseBundle\Entity\Course", mappedBy="owner")
@@ -254,4 +246,5 @@ class User extends BaseUser
     {
         return $this->categoryProgresses;
     }
+    
 }

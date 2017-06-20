@@ -34,15 +34,7 @@ class User extends BaseUser
      */
     protected $lastname;
 
-    /**
-     * @ORM\Column(name="feedback_link", type="string", length=255, nullable=true)
-     */
-    protected $feedbackLink;
 
-    /**
-     * @ORM\Column(name="project_link", type="string", length=255, nullable=true)
-     */
-    protected $projectLink;
 
     /**
      * @ORM\OneToMany(targetEntity="CourseBundle\Entity\Course", mappedBy="owner")
@@ -254,52 +246,5 @@ class User extends BaseUser
     {
         return $this->categoryProgresses;
     }
-
-    /**
-     * Set feedbackLink
-     *
-     * @param string $feedbackLink
-     *
-     * @return User
-     */
-    public function setFeedbackLink($feedbackLink)
-    {
-        $this->feedbackLink = $feedbackLink;
-
-        return $this;
-    }
-
-    /**
-     * Get feedbackLink
-     *
-     * @return string
-     */
-    public function getFeedbackLink()
-    {
-        return $this->feedbackLink;
-    }
-
-    /**
-     * Set projectLink
-     *
-     * @param string $projectLink
-     *
-     * @return User
-     */
-    public function setProjectLink($projectLink)
-    {
-        $this->projectLink = $projectLink;
-
-        return $this;
-    }
-
-    /**
-     * Get projectLink
-     *
-     * @return string
-     */
-    public function getProjectLink()
-    {
-        return $this->projectLink;
-    }
+    
 }

@@ -7,11 +7,11 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Evaluate Submission</h4>
+            <h4 class="modal-title">Evaluate Submission </h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
-            <h4>Submission by: {{ submission.user.lastname }}, {{ submission.user.firstname }}</h4>
+            <h4>Submission to {{ submission.assignment.name }} by: {{ submission.user.lastname }}, {{ submission.user.firstname }}</h4>
 
             <ul>
                 <li>Submitted Link: <a href="{{ submission.link }}">{{ submission.link }}</a></li>
@@ -20,7 +20,6 @@
             {{ form_start(form, {'action':path('submission_evaluate', {'submissionid':submission.id})}) }}
             {{ form_row(form.points) }} out of {{ submission.assignment.points }}
             {{ form_row(form.feedbackComments) }}
-            {{ form_row(form.feedbackLink) }}
             {{ form_end(form) }}
 
         </div>

@@ -17,16 +17,19 @@
                 <thead>
                 <tr>
                     <th>Student Name</th>
-                    <th>Class Score</th>
+                    <th>Total Points</th>
                     {% for category in dash.course.categories %}
-                    <th scope="col" colspan="2"><a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}">{{ category.name }}</a> <span class="categoryStats">( {{ category.minScoreEarned }} | {{ category.medianScoreEarned }} | {{ category.MaxScoreEarned }} )</span></th>
+                    <th scope="col" colspan="2"><a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}">{{ category.name }}</a> <span class="categoryStats">( {{ category.maxPoints }} points total ) </span></th>
                     {% endfor %}
                 </tr>
                 </thead>
                 <tbody>
                 {% for dashboard in dashlist if dashboard.role == 1%}
-                <tr><td rowspan="3">{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}<br> <span class="glyphicon glyphicon-pencil"></span> <span class="glyphicon glyphicon-link"></span><br>
-                        <a href="javascript:void(0);" class="btn btn-xs btn-info">Update Feedback Link</a>
+                <tr><td rowspan="3">{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}<br>
+                        {% if dashboard.feedbacklink %}<a href="{{ dashboard.feedbacklink }}" target="_blank"><span class="glyphicon glyphicon-pencil"></span></a>{% else %} <span class="glyphicon glyphicon-pencil"></span>{% endif %}
+                        {% if dashboard.projectlink %}<a href="{{ dashboard.projectlink }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a> {% else %}<span class="glyphicon glyphicon-ban-circle"></span>{% endif %}<br>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-info">Update Feedback Link</a><br>
+                        Quick Points: <a href="javascript:void(0);" class="quickpts badge" role="button" data-id="{{ dashboard.id }}">{{ dashboard.quickPoints }}</a>
                     </td>
                     <td rowspan="3">{{ dashboard.courseScore }}</td>
                 {% for category in dash.course.categories %}
@@ -53,13 +56,13 @@
                 <tr>
                 {% for category in dash.course.categories %}
                     <td>Submitted: {% if progresslist[dashboard.user.id]['progressList'][category.id].submissions > 0 %}<a href="javascript:void(0);" class="evaluateRead badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].submissions }}</a>{% endif %}</td>
-                    <td>Quick Points: <a href="javascript:void(0);" class="quickpts badge" role="button" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].quickPoints }}</a></td>
+                    <td>Notifications: <a href="javascript:void(0);" class="badge notify_catview" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].notifications|length }}</a></td>
                 {% endfor %}
                 </tr>
                 <tr>
                 {% for category in dash.course.categories %}
                     <td>Unreviewed: {% if progresslist[dashboard.user.id]['progressList'][category.id].unread > 0 %} <a href="javascript:void(0);" class="evaluateUnread badge" role="button" data-uid="{{ dashboard.user.id }}" data-cid="{{ category.id }}"> {{ progresslist[dashboard.user.id]['progressList'][category.id].unread }}</a>{% endif %}</td>
-                    <td>Notifications: <a href="javascript:void(0);" class="badge notify_catview" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">{{ progresslist[dashboard.user.id]['progressList'][category.id].notifications|length }}</a> <a href="javascript:void(0);" class="btn btn-info btn-block btn-xs notify" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">Notify</a></td>
+                    <td><a href="javascript:void(0);" class="btn btn-info btn-block btn-xs notify" data-id="{{ progresslist[dashboard.user.id]['progressList'][category.id].id }}">Notify</a></td>
                 {% endfor %}
                 </tr>
 
@@ -132,9 +135,9 @@
         });
 
         $('.quickpts').click( function() {
-            var catProgId = $(this).data('id');
-            var url="{{ path( 'add_quickpoints', { 'categoryprogressid':'catProgId'}) }}";
-            url = url.replace( "catProgId", catProgId );
+            var dashId = $(this).data('id');
+            var url="{{ path( 'add_quickpoints', { 'dashboardid':'dashId'}) }}";
+            url = url.replace( "dashId", dashId );
             $('#submitModal').load(url);
         });
 

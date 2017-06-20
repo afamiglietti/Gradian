@@ -115,6 +115,7 @@ Your built environment analysis will be composed in at least three stages, with 
         $assignment->setCategory($this->getReference($category));
         $assignment->setCourse($this->getReference($course));
         $assignment->setRequired($required);
+        $assignment->setPoints(25);
         $assignment->setInstructions($instructions);
         $assignment->setDueDate($duedate);
         $assignment->setDisplayOrder($displayorder);

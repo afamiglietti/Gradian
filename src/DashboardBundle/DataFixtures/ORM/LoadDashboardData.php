@@ -25,6 +25,8 @@ class LoadDashboardData extends AbstractFixture implements OrderedFixtureInterfa
             $studentDash->setUser($this->getReference('studentUser' . strval($i)));
             $studentDash->setCourse($this->getReference('testCourse'));
             $studentDash->setRole(1);
+            $studentDash->setProjectLink('http://www.smbc-comics.com/');
+            $studentDash->setFeedbackLink('https://docs.google.com/document/d/148BmUixSawsRjatowXQ9Qqjd8NEcOXyD-pz8YiB3LAE/edit');
 
             $manager->persist($studentDash);
 

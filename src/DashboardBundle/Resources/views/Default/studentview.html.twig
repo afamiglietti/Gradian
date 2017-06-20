@@ -13,6 +13,12 @@
 
                 <div id="progress"></div>
                 <h2> out of {{ dash.course.maxPoints }}</h2>
+                <hr>
+                <ul class="list-unstyled">
+                    <li><a href="{{ dash.projectLink }}" target="_blank">My Project Site</a></li>
+                    <li><a href="javascript:void(0);" class="projectUpdate btn btn-primary btn-xs">Update Project Site</a></li>
+                    <li><a href="{{ dash.feedbackLink }}" target="_blank">My Feedback Doc</a></li>
+                </ul>
             </div>
             <div class="col-md-8">
                 <div class="row">
@@ -34,8 +40,11 @@
                                     </div>
                                 </div>
                                 <h4>Assignments: {{ catprogresslist[category.id].submissions }} out of {{ category.totalAssignments }}</h4>
-                                <a href="javascript:void(0);" class="btn btn-primary viewCategory" data-id="{{ category.id }}">More About This Category</a>
-                                <a href="javascript:void(0);" class="btn btn-primary submitAssignment" data-id="{{ category.id }}">Submit Work in This Category</a>
+                                <div class="btn-group" role="group" aria-label="category submission buttons">
+                                    <button type="button" class="btn btn-default viewCategory" data-id="{{ category.id }}">More About This Category</button>
+                                    <button type="button"" class="btn btn-primary submitAssignment" data-id="{{ category.id }}">Submit Work</button>
+                                    <button type="button" class="btn btn-info reviewSubmits" data-id="{{ category.id }}">Review Submissions</button>
+                                </div>
                             </div>
                         </div>
                     </div>

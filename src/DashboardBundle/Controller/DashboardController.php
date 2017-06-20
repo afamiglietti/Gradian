@@ -204,15 +204,14 @@ class DashboardController extends Controller
     /**
      * Add quick points from the dashboard
      *
-     * @Route("/add_quickpoints/{categoryprogressid}", name="add_quickpoints")
+     * @Route("/add_quickpoints/{dashboardid}", name="add_quickpoints")
      */
-    public function addQuickpointsAction($categoryprogressid, Request $request)
+    public function addQuickpointsAction($dashboardid, Request $request)
     {
-        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
-        $courseId = $categoryProgress->getCategory()->getCourse()->getId();
-        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findOneBy(array('user' => $categoryProgress->getUser(), 'course' => $categoryProgress->getCategory()->getCourse()));
+        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->find($dashboardid);
+        $course = $dashboard->getCourse();
 
-        $defaultData = array('quickPoints' => $categoryProgress->getQuickPoints());
+        $defaultData = array('quickPoints' => $dashboard->getQuickPoints());
 
         $form = $this->createFormBuilder($defaultData)
             ->add('quickPoints', IntegerType::class)
@@ -226,28 +225,22 @@ class DashboardController extends Controller
             $quickPoints = $data['quickPoints'];
 
             //clear old quick points from current point total, then add new quick point figure
-            $currentPoints = $categoryProgress->getPointsEarned();
-            $currentPoints = $currentPoints - $categoryProgress->getQuickPoints();
-            $currentPoints = $currentPoints + $quickPoints;
 
             $currentTotalPoints = $dashboard->getCourseScore();
-            $currentTotalPoints = $currentTotalPoints - $categoryProgress->getQuickPoints();
+            $currentTotalPoints = $currentTotalPoints - $dashboard->getQuickPoints();
             $currentTotalPoints = $currentTotalPoints + $quickPoints;
 
-            $categoryProgress->setPointsEarned($currentPoints);
-            $categoryProgress->setQuickPoints($quickPoints);
-
+            $dashboard->setQuickPoints($quickPoints);
             $dashboard->setCourseScore($currentTotalPoints);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($categoryProgress);
             $em->persist($dashboard);
             $em->flush();
 
-            return $this->redirectToRoute('instr_dash_view', array('courseid' => $courseId));
+            return $this->redirectToRoute('instr_dash_view', array('courseid' => $course->getId()));
         }
 
-        return $this->render('DashboardBundle:Default:quickpoints.html.twig', array ('form' => $form->createView(), 'categoryprogressid' => $categoryprogressid));
+        return $this->render('DashboardBundle:Default:quickpoints.html.twig', array ('form' => $form->createView(), 'dashboardid' => $dashboardid));
     }
 
     /**
