@@ -22,7 +22,7 @@ class LoadCategoryProgressData extends AbstractFixture implements OrderedFixture
             $catProgress = new CategoryProgress();
             $catProgress->setCategory($this->getReference('readingSummaries'));
             $catProgress->setUser($this->getReference('studentUser' . strval($i)));
-            $catProgress->setPointsEarned(rand(300, 600));
+
 
             $manager->persist($catProgress);
 
@@ -33,7 +33,7 @@ class LoadCategoryProgressData extends AbstractFixture implements OrderedFixture
             $catProgress = new CategoryProgress();
             $catProgress->setCategory($this->getReference('annotatedBibliography'));
             $catProgress->setUser($this->getReference('studentUser' . strval($i)));
-            $catProgress->setPointsEarned(rand(250, 500));
+
 
             $manager->persist($catProgress);
 
@@ -44,7 +44,6 @@ class LoadCategoryProgressData extends AbstractFixture implements OrderedFixture
             $catProgress = new CategoryProgress();
             $catProgress->setCategory($this->getReference('environmentDescription'));
             $catProgress->setUser($this->getReference('studentUser' . strval($i)));
-            $catProgress->setPointsEarned(rand(300, 600));
 
             $manager->persist($catProgress);
 
@@ -55,7 +54,6 @@ class LoadCategoryProgressData extends AbstractFixture implements OrderedFixture
             $catProgress = new CategoryProgress();
             $catProgress->setCategory($this->getReference('environmentAnalysis'));
             $catProgress->setUser($this->getReference('studentUser' . strval($i)));
-            $catProgress->setPointsEarned(rand(300, 600));
 
             $manager->persist($catProgress);
 
@@ -66,7 +64,6 @@ class LoadCategoryProgressData extends AbstractFixture implements OrderedFixture
             $catProgress = new CategoryProgress();
             $catProgress->setCategory($this->getReference('participation'));
             $catProgress->setUser($this->getReference('studentUser' . strval($i)));
-            $catProgress->setPointsEarned(rand(300, 500));
 
             $manager->persist($catProgress);
 

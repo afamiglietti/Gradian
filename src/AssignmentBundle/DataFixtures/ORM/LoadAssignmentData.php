@@ -24,16 +24,37 @@ class LoadAssignmentData extends AbstractFixture implements OrderedFixtureInterf
             $category ='readingSummaries';
             $course = 'testCourse';
             $required = true;
+            $points = 100;
             $instructions = 'Project Purpose and Goals: A summary emerges in the process of a reader’s coming to understand a text. This process might take very little time, or it might take several read-throughs and other steps, like looking up unknown words and annotating thoughts and ideas in the margins. Ultimately strong summaries for this course will reflect your understanding of the articles’ main ideas, quoting one or two passages you deem particularly important. A summary is not the practice of replacing words with synonyms.';
             $duedate = new \DateTime('2017-06-0'.strval($i).'T00:00:00Z');
             $displayorder = $i;
             $rubriclink = 'https://docs.google.com/document/d/1oGs99Y83oUieh3p0jqzX6LojqsTLa2vrs_iddl8iWIo/edit';
 
-            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $instructions, $duedate, $displayorder, $rubriclink);
+            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $points, $instructions, $duedate, $displayorder, $rubriclink);
 
             $manager->persist($summaryAssignment);
 
             $this->addReference('summaryAssign' . strval($i), $summaryAssignment);
+
+        }
+
+        for($i = 1; $i<=12; $i++){
+
+            $name = "Optional Summary" . strval($i);
+            $category ='readingSummaries';
+            $course = 'testCourse';
+            $required = false;
+            $points = 50;
+            $instructions = 'Project Purpose and Goals: A summary emerges in the process of a reader’s coming to understand a text. This process might take very little time, or it might take several read-throughs and other steps, like looking up unknown words and annotating thoughts and ideas in the margins. Ultimately strong summaries for this course will reflect your understanding of the articles’ main ideas, quoting one or two passages you deem particularly important. A summary is not the practice of replacing words with synonyms.';
+            $duedate = null;
+            $displayorder = $i + 6;
+            $rubriclink = 'https://docs.google.com/document/d/1oGs99Y83oUieh3p0jqzX6LojqsTLa2vrs_iddl8iWIo/edit';
+
+            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $points, $instructions, $duedate, $displayorder, $rubriclink);
+
+            $manager->persist($summaryAssignment);
+
+            $this->addReference('optionalsummaryAssign' . strval($i), $summaryAssignment);
 
         }
 
@@ -43,6 +64,7 @@ class LoadAssignmentData extends AbstractFixture implements OrderedFixtureInterf
             $category ='annotatedBibliography';
             $course = 'testCourse';
             $required = true;
+            $points = 50;
             $instructions = 'When complete, your multimedia annotated bibliography should contain annotations of 150-250 words each for at least 10 sources. You should have a balance of academic and non-academic sources, and text sources (articles, books, blog posts) should be balanced by multimedia sources (video, images, podcasts, etc.).
 As described on the University of Cornell Library website on “How to Prepare an Annotated Bibliography,” “the purpose of the annotation is to inform the reader of the relevance, accuracy, and quality of the sources cited.” In addition to MLA citations and annotations, your multimedia annotated bibliography will include links to your sources or to web references that identify where your sources can be located (e.g., in the library, on Amazon.com, on Netflix, etc.).
 Ideally each annotation should briefly and concisely answer the following five questions about each source:
@@ -55,7 +77,7 @@ What is the relationship between this source and the other sources you’ve unco
             $displayorder = $i;
             $rubriclink = 'https://docs.google.com/document/d/1DAAm4JQL4mkQ-3sHgIXdLLbQsikn7DSjLNeOmk7pC4M/edit';
 
-            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $instructions, $duedate, $displayorder, $rubriclink);
+            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $points, $instructions, $duedate, $displayorder, $rubriclink);
 
             $manager->persist($summaryAssignment);
 
@@ -79,7 +101,7 @@ Take written or recorded voice notes in which you create an inventory or catalog
             $displayorder = $i;
             $rubriclink = 'https://docs.google.com/document/d/1vOm-X-Ex4YQhGTu53m36MORViWz3HIgsoC8lucfNINk/edit';
 
-            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, $instructions, $duedate, $displayorder, $rubriclink);
+            $summaryAssignment = $this->createAssignment($name, $category, $course, $required, 200, $instructions, $duedate, $displayorder, $rubriclink);
 
             $manager->persist($summaryAssignment);
 
@@ -98,7 +120,7 @@ Your built environment analysis will be composed in at least three stages, with 
         $displayorder = 1;
         $rubriclink = 'https://docs.google.com/document/d/1vOm-X-Ex4YQhGTu53m36MORViWz3HIgsoC8lucfNINk/edit';
 
-        $analysisAssignment = $this->createAssignment($name, $category, $course, $required, $instructions, $duedate, $displayorder, $rubriclink);
+        $analysisAssignment = $this->createAssignment($name, $category, $course, $required, 600, $instructions, $duedate, $displayorder, $rubriclink);
 
         $manager->persist($analysisAssignment);
 
@@ -108,14 +130,14 @@ Your built environment analysis will be composed in at least three stages, with 
 
     }
 
-    private function createAssignment($name, $category, $course, $required, $instructions, $duedate, $displayorder, $rubriclink, $recurring = false)
+    private function createAssignment($name, $category, $course, $required, $points, $instructions, $duedate, $displayorder, $rubriclink, $recurring = false)
     {
         $assignment = new Assignment();
         $assignment->setName($name);
         $assignment->setCategory($this->getReference($category));
         $assignment->setCourse($this->getReference($course));
         $assignment->setRequired($required);
-        $assignment->setPoints(25);
+        $assignment->setPoints($points);
         $assignment->setInstructions($instructions);
         $assignment->setDueDate($duedate);
         $assignment->setDisplayOrder($displayorder);

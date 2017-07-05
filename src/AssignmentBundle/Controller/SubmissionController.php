@@ -23,21 +23,22 @@ class SubmissionController extends Controller
 {
 
     /**
-     * @Route("/new/{categoryid}", name="submission_new")
+     * @Route("/new/{assignmentid}", name="submission_new")
      *
      */
-    public function newAction(Request $request, $categoryid)
+    public function newAction(Request $request, $assignmentid)
     {
-        $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $catProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('category'=>$category, 'user'=>$user));
 
-        $assignments = $category->getAssignments();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $assignment = $this->getDoctrine()->getRepository('AssignmentBundle:Assignment')->find($assignmentid);
+        $category = $assignment->getCategory();
+        $catProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->findOneBy(array('user' => $user, 'category' => $category));
 
         $submission = new Submission();
         $submission->setUser($user);
+        $submission->setAssignment($assignment);
 
-        $form = $this->createForm(SubmitAssignmentType::class, $submission, array('assignments' => $assignments));
+        $form = $this->createForm(SubmitAssignmentType::class, $submission, array());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,10 +52,10 @@ class SubmissionController extends Controller
             $em->persist($submission);
             $em->persist($catProgress);
             $em->flush();
-            return $this->redirectToRoute('student_dash_view', array('courseid' => $category->getCourse()->getId()));
+            return $this->redirectToRoute('student_dash_view', array('courseid' => $assignment->getCourse()->getId()));
         }
 
-        return $this->render('AssignmentBundle:Submission:new.html.twig', array('form' => $form->createView(), 'category' => $category,));
+        return $this->render('AssignmentBundle:Submission:new.html.twig', array('form' => $form->createView(), 'assignment' => $assignment));
     }
 
     /**
@@ -161,6 +162,21 @@ class SubmissionController extends Controller
         }
 
         return $this->render('AssignmentBundle:Submission:evaluate.html.twig', array('form' => $form->createView(), 'submission' =>$submission));
+    }
+
+    /**
+     * Present a list of student submissions in a given category so they can review scores and comments
+     *
+     * @Route("/student_review/{categoryid}", name="student_review")
+     */
+    public function studentReviewAction($categoryid)
+    {
+        $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
+        $assignments = $category->getAssignments();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $submissions = $this->getDoctrine()->getRepository('AssignmentBundle:Submission')->findBy(array('user'=>$user, 'assignment'=> $assignments->toArray()));
+
+        return $this->render('AssignmentBundle:Submission:studentreview.html.twig', array('submissions' => $submissions, 'category' =>$category));
     }
 
 }

@@ -23,31 +23,90 @@
             <div class="col-md-8">
                 <div class="row">
                     {% for category in dash.course.categories %}
+                    {% if loop.index is even %}
+                    <div class="row">
+                    {% endif %}
                     <div class="col-md-6">
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    {{ category.name }} - Worth {{ category.maxPoints }} Possible Points
+                                    <a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}"> {{ category.name }} - Worth {{ category.maxPoints }} Possible Points </a>
+                                <span class="pull-right notification-section">
+                                {% if notificationlist[category.id][0] is defined %}
+                                <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="0"><span class="glyphicon glyphicon-exclamation-sign notification-icon text-danger">
+                                    <span class="badge notification-badge">{{ notificationlist[category.id][0]|length }}</span>
+                                </span></a>
+                                {% else %}
+                                <a href="javascript:void(0);" class="viewNotifications" data-id="{{ catprogresslist[category.id].id }}" data-type="0"><span class="glyphicon glyphicon-exclamation-sign notification-icon">
+                                </span></a>
+                                {% endif %}
+                                {% if notificationlist[category.id][1] is defined %}
+                                <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="1"><span class="glyphicon glyphicon-star notification-icon text-danger">
+                                    <span class="badge notification-badge">{{ notificationlist[category.id][1]|length }}</span>
+                                </span></a>
+                                {% else %}
+                                <a href="javascript:void(0);" class="viewNotifications" data-id="{{ catprogresslist[category.id].id }}" data-type="1"><span class="glyphicon glyphicon-star notification-icon">
+                                </span></a>
+                                {% endif %}
+                                {% if notificationlist[category.id][2] is defined %}
+                                <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="2"><span class="glyphicon glyphicon-pencil notification-icon text-danger">
+                                    <span class="badge notification-badge">{{ notificationlist[category.id][2]|length }}</span>
+                                </span></a>
+                                {% else %}
+                                <a href="javascript:void(0);" class="viewNotifications" data-id="{{ catprogresslist[category.id].id }}" data-type="2"><span class="glyphicon glyphicon-pencil notification-icon">
+                                </span></a>
+                                {% endif %}
+                                {% if notificationlist[category.id][3] is defined %}
+                                <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="3"><span class="glyphicon glyphicon-certificate notification-icon text-danger">
+                                    <span class="badge notification-badge">{{ notificationlist[category.id][3]|length }}</span>
+                                </span></a>
+                                {% else %}
+                                <a href="javascript:void(0);" class="viewNotifications" data-id="{{ catprogresslist[category.id].id }}" data-type="3"><span class="glyphicon glyphicon-certificate notification-icon">
+                                </span></a>
+                                {% endif %}
+                                </span>
                                 </h3>
+
                             </div>
                             <div class="panel-body category-info">
                                 <h3>Progress:</h3>
-                                <h4>Points: {{ catprogresslist[category.id].pointsEarned }}/{{ category.maxPoints }}</h4>
-                                {% set currentprogress = (catprogresslist[category.id].pointsEarned / category.maxPoints) * 100 %}
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" aria-valuenow="{{ currentprogress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ currentprogress }}%;">
-                                        {{ currentprogress }}%
+                                <div class="pointBox">
+                                    <h4>Points: </h4>
+                                    {% set currentprogress = (catprogresslist[category.id].pointsEarned / category.maxPoints) * 100 %}
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" aria-valuenow="{{ catprogresslist[category.id].pointsEarned }}/{{ category.maxPoints }}}" aria-valuemin="0" aria-valuemax="{{ category.maxPoints }}" style="width: {{ currentprogress }}%;">
+                                            {{ catprogresslist[category.id].pointsEarned }}/{{ category.maxPoints }}
+                                        </div>
                                     </div>
                                 </div>
-                                <h4>Assignments: {{ catprogresslist[category.id].submissions }} out of {{ category.totalAssignments }}</h4>
-                                <div class="btn-group" role="group" aria-label="category submission buttons">
-                                    <button type="button" class="btn btn-default viewCategory" data-id="{{ category.id }}">More About This Category</button>
-                                    <button type="button"" class="btn btn-primary submitAssignment" data-id="{{ category.id }}">Submit Work</button>
-                                    <button type="button" class="btn btn-info reviewSubmits" data-id="{{ category.id }}">Review Submissions</button>
-                                </div>
+                                <h4>Assignments: {{ catprogresslist[category.id].submissions }} out of {{ category.totalAssignments }} <a href="#assignmentInfo{{ category.id }}" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-menu-down"></span></a></h4>
+                                <table class="collapse table table-striped" id="assignmentInfo{{ category.id }}">
+                                {% if assignments[category.id] is defined %}
+                                    {% for assignment in assignments[category.id] %}
+                                        <tr>
+                                        <td>{{ assignment.name }}</td>
+                                        {% if submissions[assignment.id] is defined %}
+                                        <td>{{ submissions[assignment.id].link }}</td>
+                                            {% if submissions[assignment.id].points is not null %}
+                                                <td><strong>Score:</strong> {{ submissions[assignment.id].points }}</td>
+                                                <td><strong>Comment:</strong> {{ submissions[assignment.id].feedbackComments }}</td>
+                                            {% else %}
+                                                <td colspan="2">NOT YET REVIEWED</td>
+                                            {% endif %}
+                                        {% else %}
+                                            <td>{{ assignment.duedate|date('m-D-Y') }}</td>
+                                            <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
+                                        {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </table>
                             </div>
                         </div>
                     </div>
+                    {% if loop.index is even %}
+                    </div>
+                    {% endif %}
                     {% endfor %}
                 </div>
             </div>
@@ -110,9 +169,9 @@
         circle.animate(progress);
 
         $('.submitAssignment').click( function() {
-            var catId = $(this).data('id');
-            var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
-            url = url.replace( "catId", catId );
+            var assId = $(this).data('id');
+            var url="{{ path( 'submission_new', { 'assignmentid':'assId'}) }}";
+            url = url.replace( "assId", assId );
             $('#submitModal').load(url);
         });
 
@@ -120,6 +179,31 @@
             var catId = $(this).data('id');
             var url="{{ path( 'category_view_modal', { 'categoryid':'catId'}) }}";
             url = url.replace( "catId", catId );
+            $('#catModal').load(url);
+        });
+
+        $('.reviewSubmits').click( function() {
+            var catId = $(this).data('id');
+            var url="{{ path( 'student_review', { 'categoryid':'catId'}) }}";
+            url = url.replace( "catId", catId );
+            $('#catModal').load(url);
+        });
+
+        $('.viewNotifications').click( function() {
+            var catId = $(this).data('id');
+            var typeId = $(this).data('type');
+            var url="{{ path( 'view_notifications_by_category_type', { 'categoryprogressid':'catId', 'type':'typeid'}) }}";
+            url = url.replace( "catId", catId );
+            url = url.replace("typeid", typeId);
+            $('#catModal').load(url);
+        });
+
+        $('.viewNotificationsUnread').click( function() {
+            var catId = $(this).data('id');
+            var typeId = $(this).data('type');
+            var url="{{ path( 'view_notifications_unread', { 'categoryprogressid':'catId', 'type':'typeid'}) }}";
+            url = url.replace( "catId", catId );
+            url = url.replace("typeid", typeId);
             $('#catModal').load(url);
         });
 

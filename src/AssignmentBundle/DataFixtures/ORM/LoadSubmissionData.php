@@ -18,7 +18,7 @@ class LoadSubmissionData extends AbstractFixture implements OrderedFixtureInterf
 
     public function load(ObjectManager $manager)
     {
-        for($i = 1; $i<=25; $i++)
+        /** for($i = 1; $i<=25; $i++)
         {
             $student = 'studentUser' . strval($i);
 
@@ -80,7 +80,7 @@ class LoadSubmissionData extends AbstractFixture implements OrderedFixtureInterf
 
         }
 
-        $manager->flush();
+        $manager->flush();**/
     }
 
     private function createSubmission($user, $assignment, $link)

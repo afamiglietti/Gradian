@@ -100,15 +100,7 @@
 
         $('#calendar').fullCalendar({
         });
-
-        $('.submitAssignment').click( function() {
-            var catId = $(this).data('id');
-            var url="{{ path( 'submission_new', { 'categoryid':'catId'}) }}";
-            url = url.replace( "catId", catId );
-            $('#submitModal').load(url);
-        });
-
-
+        
         $('.evaluateUnread').click( function() {
             var userId = $(this).data('uid');
             var catId = $(this).data('cid');

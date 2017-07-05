@@ -35,3 +35,37 @@
 .notify {
     width: 50%;
 }
+
+.pointBox h4 {
+    width: 15%;
+    float: left;
+    margin-top: 0;
+}
+
+.pointBox .progress {
+    width: 85%;
+    float: left;
+}
+
+.notification-icon {
+    position: relative;
+    font-size: 1.25em;
+    margin: 0 2.5px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 2px 3px;
+    min-width: 5px;
+    font-size: .5em;
+    font-weight: bold;
+}
+
+.notification-section, .notification-section a {
+    color: #A4C8D9;
+}
+
+
+

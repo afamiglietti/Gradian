@@ -21,11 +21,9 @@ class SubmitAssignmentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $assignments = $options['assignments'];
         $builder
             ->add('link')
             ->add('comment')
-            ->add('assignment', EntityType::class, array('class' => 'AssignmentBundle:Assignment', 'choices' => $assignments, 'choice_label' => 'name', 'placeholder' => ''))
             ->add('save', SubmitType::class, array('label' => 'Submit Assignment'))
         ;
     }
@@ -37,7 +35,6 @@ class SubmitAssignmentType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AssignmentBundle\Entity\Submission',
-            'assignments' => null
         ));
     }
 }

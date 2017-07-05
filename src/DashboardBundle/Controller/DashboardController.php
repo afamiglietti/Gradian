@@ -47,7 +47,21 @@ class DashboardController extends Controller
 
         $dash = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->findOneBy(array('user' => $user, 'course' => $course));
 
+        $submissionRepo = $this->getDoctrine()->getRepository('AssignmentBundle:Submission');
 
+        $submissions = $submissionRepo->findBy(array('user' =>$user));
+        $assignments = $course->getAssignments();
+
+
+          /**$query = $submissionRepo->createQueryBuilder('s')
+            ->add('select', 's', 'a')
+            ->where('s.user = :user')
+            ->setParameter('user', $user)
+            ->join('s.assignment', 'a')
+            ->getQuery();
+
+        $submissions = $query->getResult();
+        **/
 
         if($dash == null){
             $dash = new Dashboard();
@@ -67,12 +81,43 @@ class DashboardController extends Controller
 
         $catProgressList = array();
         $totalScore = 0;
-        foreach($user->getCategoryProgresses() as $catprogress){
+        $catProgresses = $user->getCategoryProgresses();
+
+        foreach($catProgresses as $catprogress){
             $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
             $totalScore = $totalScore + $catprogress->getPointsEarned();
         }
 
-        return $this->render('DashboardBundle:Default:studentview.html.twig', array('dash'=>$dash, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore));
+        $newNotificationList = array();
+        foreach($catProgresses as $catprogress){
+            $notificationSubList = array();
+            foreach($catprogress->getNotifications() as $notification){
+                if($notification->getDateRead() == null){
+                    $notificationSubList[$notification->getType()][] = $notification;
+                }
+            }
+            $newNotificationList[$catprogress->getCategory()->getId()] = $notificationSubList;
+        }
+
+        $categoryLookUp = array();
+        $assignmentsByCategory = array();
+
+        foreach($assignments as $assignment){
+            $catId = $assignment->getCategory()->getId();
+            $assignmentsByCategory[$catId][] = $assignment;
+            $categoryLookUp[$assignment->getId()]= $catId;
+        }
+
+        $submissionsByAssignment = array();
+
+        foreach($submissions as $submission){
+            $assignmentId = $submission->getAssignment()->getId();
+            $submissionsByAssignment[$assignmentId] = $submission;
+        }
+
+
+
+        return $this->render('DashboardBundle:Default:studentview.html.twig', array('dash'=>$dash, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore, 'submissions' => $submissionsByAssignment, 'assignments' =>$assignmentsByCategory, 'notificationlist' => $newNotificationList));
     }
 
     /**
@@ -289,6 +334,42 @@ class DashboardController extends Controller
         $notifications = $categoryProgress->getNotifications();
 
         return $this->render('DashboardBundle:Default:notificationsByCategory.html.twig', array('notifications' => $notifications));
+    }
+
+    /**
+     * View Student Notifications by category and type (for student dash)
+     *
+     * @Route("/view_notifications_by_type/{categoryprogressid}/{type}", name="view_notifications_by_category_type")
+     */
+    public function viewNotificationsByCategoryTypeAction($categoryprogressid, $type)
+    {
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
+        $notifications = $this->getDoctrine()->getRepository('AssignmentBundle:Notification')->findBy(array('categoryProgress' => $categoryProgress, 'type' => $type));
+
+
+        return $this->render('DashboardBundle:Default:notificationsByCategoryType.html.twig', array('notifications' => $notifications));
+    }
+
+    /**
+     * View Unread Student Notifications by category and type (for student dash)
+     *
+     * @Route("/view_unread_notifications_by_type/{categoryprogressid}/{type}", name="view_notifications_unread")
+     */
+    public function viewNotificationsUnread($categoryprogressid, $type)
+    {
+        $categoryProgress = $this->getDoctrine()->getRepository('AssignmentBundle:CategoryProgress')->find($categoryprogressid);
+        $notifications = $this->getDoctrine()->getRepository('AssignmentBundle:Notification')->findBy(array('categoryProgress' => $categoryProgress, 'type' => $type, 'dateRead' => null));
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach($notifications as $notification){
+            $notification->setDateRead(new \DateTime());
+            $em->persist($notification);
+        }
+
+        $em->flush();
+
+        return $this->render('DashboardBundle:Default:notificationsUnread.html.twig', array('notifications' => $notifications));
     }
 
     /**

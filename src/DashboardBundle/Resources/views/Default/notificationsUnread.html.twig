@@ -1,6 +1,6 @@
 <script language="javascript">
     $(document).ready(function () {
-        $('#reviewModal').modal();
+        $('#catModal').modal();
     });
 
 </script>
@@ -8,12 +8,15 @@
 <div class="modal-dialog" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">Notifications</h4>
+            <h4 class="modal-title">New Notifications</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         <div class="modal-body">
+            {% if notifications|length == 0 %}
+            <h3>No Notifications in this Category yet!</h3>
+            {% else %}
             <table class="table">
-                <tr><th>Message</th><th>Type</th><th>Date Read</th><th>Date Sent</th></tr>
+                <tr><th>Message</th><th>Type</th><th>Date Sent</th></tr>
                 {% for notification in notifications %}
                 <tr><td>{{ notification.message }}</td>
                     <td>{% if notification.type == constant('MISSING_WORK', notification) %}<span class="glyphicon glyphicon-exclamation-sign text-danger"></span>
@@ -22,10 +25,10 @@
                         {% else %} <span class="glyphicon glyphicon-certificate alert-info"></span>
                         {% endif %}
                     </td>
-                    <td>{{ notification.dateRead is empty ? " " : notification.dateRead|date('m-d-Y G:i') }}</td>
                     <td>{{ notification.dateCreated|date('m-d-Y G:i') }}</td></tr>
                 {% endfor %}
             </table>
+        {% endif %}
         </div>
     </div>
 </div>
