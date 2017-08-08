@@ -59,6 +59,32 @@ class SubmissionController extends Controller
     }
 
     /**
+     * Revise an existing Submission
+     *
+     * @Route("/edit/{submissionid}", name="submission_edit")
+     */
+    public function editAction(Request $request, $submissionid){
+
+        $submission = $this->getDoctrine()->getRepository('AssignmentBundle:Submission')->find($submissionid);
+        $assignment = $submission->getAssignment();
+
+        $form = $this->createForm(SubmitAssignmentType::class, $submission, array());
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $submission = $form->getData();
+            $submission->setSubmitted(new \DateTime());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($submission);
+            $em->flush();
+            return $this->redirectToRoute('student_dash_view', array('courseid' => $assignment->getCourse()->getId()));
+        }
+
+        return $this->render('AssignmentBundle:Submission:edit.html.twig', array('form' => $form->createView(), 'submission' => $submission, 'assignment' => $assignment));
+    }
+
+    /**
      * Return a list of not yet evaluated submissions to evaluate
      *
      * @Route("/unreadevaluate/{userid}/{categoryid}", name="unread_evaluate")

@@ -80,14 +80,14 @@ class Assignment
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="active", type="datetime")
+     * @ORM\Column(name="active", type="datetime", nullable=true)
      */
     private $active;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="display_order", type="integer")
+     * @ORM\Column(name="display_order", type="integer", nullable=true)
      */
     private $displayOrder;
 

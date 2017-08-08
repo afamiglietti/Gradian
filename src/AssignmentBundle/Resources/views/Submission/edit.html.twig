@@ -1,0 +1,25 @@
+<script language="javascript">
+    $(document).ready(function () {
+        $('#submitModal').modal();
+    });
+</script>
+
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Revise Submission for {{ assignment.name }}</h4>
+        </div>
+        <div class="modal-body">
+            <h5>Assignment Instructions</h5>
+            <p>{{ assignment.instructions }}</p>
+            <a href="{{ assignment.rubricLink }}" target="_blank">Review Assignment Rubric</a>
+            <div class="form-group">
+            {{ form_start(form, {'action':path('submission_edit', {'submissionid':submission.id})}) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+

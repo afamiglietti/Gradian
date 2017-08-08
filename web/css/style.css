@@ -1,23 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway|Roboto');
+
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
 .scoreLabel{
-    font-size: 3em;
+    font-size: 1.8em;
     font-weight: bold;
+    text-align: center;
 }
 
 .category-info h3{
     margin-top: 5px;
 }
 
-#dash-head {
-    margin-top: 0;
-    margin-bottom: 20px;
-    border-bottom: solid 1px black;
+h1 {
+    font-family: "Raleway", Helvetica, Arial, sans-serif;
 }
 
-.myprogress {
-    height: 20px;
-    background-color: #F07575;
-    background-image: linear-gradient(to right, red, blue, green);
-
+#dash-head {
+    margin-top: 0;
+    margin-bottom: 40px;
+    border-bottom: solid 1px black;
 }
 
 .progressIndicator {
@@ -47,6 +51,11 @@
     float: left;
 }
 
+#progress {
+    width: 90%;
+    margin: 0 auto;
+}
+
 .notification-icon {
     position: relative;
     font-size: 1.25em;
@@ -67,5 +76,16 @@
     color: #A4C8D9;
 }
 
+.dashicon {
+    font-size: 2em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+}
+
+#mainStudentButtons{
+    font-size: 4em;
+    margin-top: 5px;
+}
 
 

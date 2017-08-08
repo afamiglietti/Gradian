@@ -4,7 +4,7 @@
 
         <div class="row">
         <div class="col-md-12">
-            <h1>{{ dash.course.name }}</h1>
+            <h1 id="dash-head">{{ dash.course.name }}</h1>
             Course Stats:
             <ul class="list-group list-inline">
                 <li class="list-group-item">Max Score: {{ dash.course.maxScoreEarned }}</li>
@@ -26,9 +26,9 @@
                 <tbody>
                 {% for dashboard in dashlist if dashboard.role == 1%}
                 <tr><td rowspan="3">{{ dashboard.user.firstname }} {{ dashboard.user.lastname }}<br>
-                        {% if dashboard.feedbacklink %}<a href="{{ dashboard.feedbacklink }}" target="_blank"><span class="glyphicon glyphicon-pencil"></span></a>{% else %} <span class="glyphicon glyphicon-pencil"></span>{% endif %}
-                        {% if dashboard.projectlink %}<a href="{{ dashboard.projectlink }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a> {% else %}<span class="glyphicon glyphicon-ban-circle"></span>{% endif %}<br>
-                        <a href="javascript:void(0);" class="btn btn-xs btn-info">Update Feedback Link</a><br>
+                        {% if dashboard.feedbacklink %}<a href="{{ dashboard.feedbacklink }}" target="_blank"><span class="glyphicon glyphicon-pencil dashicon"></span></a>{% else %} <span class="glyphicon glyphicon-pencil dashicon"></span>{% endif %}
+                        {% if dashboard.projectlink %}<a href="{{ dashboard.projectlink }}" target="_blank"><span class="glyphicon glyphicon-link dashicon"></span></a> {% else %}<span class="glyphicon glyphicon-ban-circle dashicon"></span>{% endif %}<br>
+                        <a href="javascript:void(0);" class="btn btn-xs btn-info feedbackUpdate" data-id="{{ dashboard.id }}">Update Feedback Link</a><br>
                         Quick Points: <a href="javascript:void(0);" class="quickpts badge" role="button" data-id="{{ dashboard.id }}">{{ dashboard.quickPoints }}</a>
                     </td>
                     <td rowspan="3">{{ dashboard.courseScore }}</td>
@@ -100,7 +100,7 @@
 
         $('#calendar').fullCalendar({
         });
-        
+
         $('.evaluateUnread').click( function() {
             var userId = $(this).data('uid');
             var catId = $(this).data('cid');
@@ -129,6 +129,13 @@
         $('.quickpts').click( function() {
             var dashId = $(this).data('id');
             var url="{{ path( 'add_quickpoints', { 'dashboardid':'dashId'}) }}";
+            url = url.replace( "dashId", dashId );
+            $('#submitModal').load(url);
+        });
+
+        $('.feedbackUpdate').click( function() {
+            var dashId = $(this).data('id');
+            var url="{{ path( 'feedback_update', { 'dashboardid':'dashId'}) }}";
             url = url.replace( "dashId", dashId );
             $('#submitModal').load(url);
         });

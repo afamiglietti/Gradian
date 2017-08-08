@@ -50,7 +50,7 @@ class DashboardController extends Controller
         $submissionRepo = $this->getDoctrine()->getRepository('AssignmentBundle:Submission');
 
         $submissions = $submissionRepo->findBy(array('user' =>$user));
-        $assignments = $course->getAssignments();
+        $assignments = $this->getDoctrine()->getRepository('AssignmentBundle:Assignment')->findBy(array('course' => $course), array('dueDate' => 'ASC'));
 
 
           /**$query = $submissionRepo->createQueryBuilder('s')
@@ -117,7 +117,7 @@ class DashboardController extends Controller
 
 
 
-        return $this->render('DashboardBundle:Default:studentview.html.twig', array('dash'=>$dash, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore, 'submissions' => $submissionsByAssignment, 'assignments' =>$assignmentsByCategory, 'notificationlist' => $newNotificationList));
+        return $this->render('DashboardBundle:Default:studentview.html.twig', array('dash'=>$dash, 'catprogresslist'=>$catProgressList, 'totalscore'=>$totalScore, 'submissions' => $submissionsByAssignment, 'assignments' =>$assignmentsByCategory, 'assignmentsByDate' => $assignments, 'notificationlist' => $newNotificationList));
     }
 
     /**
@@ -286,6 +286,76 @@ class DashboardController extends Controller
         }
 
         return $this->render('DashboardBundle:Default:quickpoints.html.twig', array ('form' => $form->createView(), 'dashboardid' => $dashboardid));
+    }
+
+    /**
+     * Update student project link from the dashboard
+     *
+     * @Route("/updateProjectLink/{dashboardid}", name="project_update")
+     */
+    public function updateProjectLinkAction($dashboardid, Request $request)
+    {
+        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->find($dashboardid);
+        $course = $dashboard->getCourse();
+
+        $defaultData = array('projectLink' => $dashboard->getProjectLink());
+
+        $form = $this->createFormBuilder($defaultData)
+            ->add('projectLink', TextType::class)
+            ->add('update', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+            $data = $form->getData();
+            $projectLink = $data['projectLink'];
+
+            $dashboard->setProjectLink($projectLink);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($dashboard);
+            $em->flush();
+
+            return $this->redirectToRoute('student_dash_view', array('courseid' => $course->getId()));
+        }
+
+        return $this->render('DashboardBundle:Default:projectlink.html.twig', array ('form' => $form->createView(), 'dashboardid' => $dashboardid));
+    }
+
+    /**
+     * Update student project link from the dashboard
+     *
+     * @Route("/updateFeedbackDoc/{dashboardid}", name="feedback_update")
+     */
+    public function updateFeedbackDocAction($dashboardid, Request $request)
+    {
+        $dashboard = $this->getDoctrine()->getRepository('DashboardBundle:Dashboard')->find($dashboardid);
+        $course = $dashboard->getCourse();
+
+        $defaultData = array('feedbackLink' => $dashboard->getFeedbackLink());
+
+        $form = $this->createFormBuilder($defaultData)
+            ->add('feedbackLink', TextType::class)
+            ->add('update', SubmitType::class)
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted()){
+            $data = $form->getData();
+            $feedbackLink = $data['feedbackLink'];
+
+            $dashboard->setFeedbackLink($feedbackLink);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($dashboard);
+            $em->flush();
+
+            return $this->redirectToRoute('instr_dash_view', array('courseid' => $course->getId()));
+        }
+
+        return $this->render('DashboardBundle:Default:feedbacklink.html.twig', array ('form' => $form->createView(), 'dashboardid' => $dashboardid));
     }
 
     /**

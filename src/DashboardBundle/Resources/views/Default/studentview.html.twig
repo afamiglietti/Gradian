@@ -3,34 +3,27 @@
 
         {# if the dash role is 1, display the student dashboard #}
         {% if dash.role == 1 %}
-        <div class="row">
-        <div class="col-md-12">
-            <h1 id="dash-head">{{ dash.user.firstname }} {{ dash.user.lastname }}'s Dashboard for {{ dash.course.name }}</h1>
-        </div>
-        </div>
+        <h1 id="dash-head">My {{ dash.course.name }} Dashboard </h1>
+
             <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
 
                 <div id="progress"></div>
-                <h2> out of {{ dash.course.maxPoints }}</h2>
                 <hr>
-                <ul class="list-unstyled">
-                    <li><a href="{{ dash.projectLink }}" target="_blank">My Project Site</a></li>
-                    <li><a href="javascript:void(0);" class="projectUpdate btn btn-primary btn-xs">Update Project Site</a></li>
-                    <li><a href="{{ dash.feedbackLink }}" target="_blank">My Feedback Doc</a></li>
-                </ul>
+                <div id="mainStudentButtons">
+                    <a href="{{ dash.projectLink }}" target="_blank"><span class="glyphicon glyphicon-link"></span></a>
+                    <a href="{{ dash.feedbackLink }}" target="_blank"> <span class="glyphicon glyphicon-pencil"></span></a>
+               </div>
+               <a href="javascript:void(0);" class="projectUpdate btn btn-primary btn-xs" data-id="{{ dash.id }}">Update</a>
             </div>
-            <div class="col-md-8">
-                <div class="row">
+            <div class="col-md-6">
                     {% for category in dash.course.categories %}
-                    {% if loop.index is even %}
-                    <div class="row">
-                    {% endif %}
-                    <div class="col-md-6">
                         <div class="panel panel-info">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    <a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}"> {{ category.name }} - Worth {{ category.maxPoints }} Possible Points </a>
+                                    <a href="javascript:void(0);" class="viewCategory" data-id="{{ category.id }}">
+                                    {{ category.name }}({{ category.maxPoints }})
+                                    </a>
                                 <span class="pull-right notification-section">
                                 {% if notificationlist[category.id][0] is defined %}
                                 <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="0"><span class="glyphicon glyphicon-exclamation-sign notification-icon text-danger">
@@ -80,13 +73,15 @@
                                     </div>
                                 </div>
                                 <h4>Assignments: {{ catprogresslist[category.id].submissions }} out of {{ category.totalAssignments }} <a href="#assignmentInfo{{ category.id }}" data-toggle="collapse" aria-expanded="false"><span class="glyphicon glyphicon-menu-down"></span></a></h4>
-                                <table class="collapse table table-striped" id="assignmentInfo{{ category.id }}">
+                                <table class="collapse table" id="assignmentInfo{{ category.id }}">
                                 {% if assignments[category.id] is defined %}
                                     {% for assignment in assignments[category.id] %}
                                         <tr>
                                         <td>{{ assignment.name }}</td>
+                                        <td>{% if assignment.required %}<strong>REQ</strong>{% endif %}</td>
                                         {% if submissions[assignment.id] is defined %}
-                                        <td>{{ submissions[assignment.id].link }}</td>
+                                        <td><a href="{{ submissions[assignment.id].link }}" target="_blank">{{ submissions[assignment.id].link[:15] ~ '...' }}</a> </td>
+                                        <td colspan="2"><a class="btn btn-xs btn-warning reviseAssignment" data-id="{{ submissions[assignment.id].id }}">Revise</a></td>
                                             {% if submissions[assignment.id].points is not null %}
                                                 <td><strong>Score:</strong> {{ submissions[assignment.id].points }}</td>
                                                 <td><strong>Comment:</strong> {{ submissions[assignment.id].feedbackComments }}</td>
@@ -94,7 +89,7 @@
                                                 <td colspan="2">NOT YET REVIEWED</td>
                                             {% endif %}
                                         {% else %}
-                                            <td>{{ assignment.duedate|date('m-D-Y') }}</td>
+                                            <td>{{ assignment.duedate|date('m/d') }}</td>
                                             <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
                                         {% endif %}
                                         </tr>
@@ -103,15 +98,21 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                    {% if loop.index is even %}
-                    </div>
-                    {% endif %}
+
                     {% endfor %}
                 </div>
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <div id="calendar"></div>
+                <div id="dateList">
+                <h4>Upcoming Assignments:</h4>
+                <ul class="list-group">
+                {% for assignment in assignmentsByDate if assignment.duedate|date('Y-m-d') > "now"|date('Y-m-d') %}
+                    {% if loop.index < 6 %}
+                    <li class="list-group-item">{{ assignment.name }}: {{ assignment.duedate|date('m/d') }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                </div>
             </div>
             </div>
 
@@ -141,6 +142,15 @@
     $(document).ready(function() {
 
         $('#calendar').fullCalendar({
+            events:[
+                {% for assignment in assignmentsByDate if assignment.dueDate is not null %}
+                {
+                    title: '{{ assignment.name }}',
+                    start: '{{ assignment.duedate|date('Y-m-d') }}'
+                },
+                {% endfor %}
+
+            ]
         });
 
         var progress = {{ totalscore }} / {{ dash.course.maxPoints }};
@@ -162,7 +172,7 @@
             trailWidth: 20,
             trailColor: '#999999',
             color: color,
-            text: { value: '{{ totalscore }}',
+            text: { value: '{{ totalscore }} out of {{ dash.course.maxPoints }}',
                     className: 'scoreLabel'}
         });
 
@@ -172,6 +182,20 @@
             var assId = $(this).data('id');
             var url="{{ path( 'submission_new', { 'assignmentid':'assId'}) }}";
             url = url.replace( "assId", assId );
+            $('#submitModal').load(url);
+        });
+
+        $('.projectUpdate').click( function() {
+            var dashId = $(this).data('id');
+            var url="{{ path( 'project_update', { 'dashboardid':'dashId'}) }}";
+            url = url.replace( "dashId", dashId );
+            $('#submitModal').load(url);
+        });
+
+        $('.reviseAssignment').click( function() {
+            var subId = $(this).data('id');
+            var url="{{ path( 'submission_edit', { 'submissionid':'subId'}) }}";
+            url = url.replace( "subId", subId );
             $('#submitModal').load(url);
         });
 
