@@ -112,7 +112,7 @@ class DashboardController extends Controller
 
         foreach($submissions as $submission){
             $assignmentId = $submission->getAssignment()->getId();
-            $submissionsByAssignment[$assignmentId] = $submission;
+            $submissionsByAssignment[$assignmentId][] = $submission;
         }
 
 

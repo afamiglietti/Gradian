@@ -50,7 +50,7 @@
                                 </span></a>
                                 {% endif %}
                                 {% if notificationlist[category.id][3] is defined %}
-                                <a href="javascript:void(0);" class="viewNotificationsUnread" data-id="{{ catprogresslist[category.id].id }}" data-type="3"><span class="glyphicon glyphicon-certificate notification-icon text-danger">
+                                <a href="javascript:void(0);" class="viewNotifications" data-id="{{ catprogresslist[category.id].id }}" data-type="3"><span class="glyphicon glyphicon-certificate notification-icon text-danger">
                                     <span class="badge notification-badge">{{ notificationlist[category.id][3]|length }}</span>
                                 </span></a>
                                 {% else %}
@@ -79,18 +79,44 @@
                                         <tr>
                                         <td>{{ assignment.name }}</td>
                                         <td>{% if assignment.required %}<strong>REQ</strong>{% endif %}</td>
-                                        {% if submissions[assignment.id] is defined %}
-                                        <td><a href="{{ submissions[assignment.id].link }}" target="_blank">{{ submissions[assignment.id].link[:15] ~ '...' }}</a> </td>
-                                        <td colspan="2"><a class="btn btn-xs btn-warning reviseAssignment" data-id="{{ submissions[assignment.id].id }}">Revise</a></td>
-                                            {% if submissions[assignment.id].points is not null %}
-                                                <td><strong>Score:</strong> {{ submissions[assignment.id].points }}</td>
-                                                <td><strong>Comment:</strong> {{ submissions[assignment.id].feedbackComments }}</td>
-                                            {% else %}
-                                                <td colspan="2">NOT YET REVIEWED</td>
+                                        {% if assignment.recurring %}
+                                            {% if submissions[assignment.id] is defined %}
+                                                {% if assignment.maxSubmissions == 0 %}
+                                                    <td><a href="javascript:void(0);" class="reviewSubmits" data-id="{{ assignment.id }}">{{ submissions[assignment.id]|length }} / &#8734;</a></td>
+                                                {% else %}
+                                                    <td><a href="javascript:void(0);" class="reviewSubmits" data-id="{{ assignment.id }}">{{ submissions[assignment.id]|length }} / {{ assignment.maxSubmissions }}</a></td>
+                                                {% endif %}
+                                                {% set totalPoints = 0 %}
+                                                {% for submission in submissions[assignment.id] %}
+                                                    {% set totalPoints = totalPoints + submission.points %}
+                                                {% endfor %}
+                                                <td> Points: {{ totalPoints }}</td>
+                                                {% if submissions[assignment.id]|length < assignment.maxSubmissions or assignment.maxSubmissions ==0 %}
+                                                <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
                                             {% endif %}
-                                        {% else %}
-                                            <td>{{ assignment.duedate|date('m/d') }}</td>
-                                            <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
+                                            {% else %}
+                                                {% if assignment.maxSubmissions == 0 %}
+                                                    <td>0 / &#8734;</td>
+                                                {% else %}
+                                                    <td>0 / {{ assignment.maxSubmissions }}</td>
+                                                {% endif %}
+                                                <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
+                                            {% endif %}
+                                            {% else %}
+
+                                            {% if submissions[assignment.id] is defined %}
+                                                <td><a href="{{ submissions[assignment.id][0].link }}" target="_blank">{{ submissions[assignment.id][0].link[:15] ~ '...' }}</a> </td>
+                                                <td colspan="2"><a class="btn btn-xs btn-warning reviseAssignment" data-id="{{ submissions[assignment.id][0].id }}">Revise</a></td>
+                                                {% if submissions[assignment.id][0].points is not null %}
+                                                    <td><strong>Score:</strong> {{ submissions[assignment.id][0].points }}</td>
+                                                    <td><strong>Comment:</strong> {{ submissions[assignment.id][0].feedbackComments }}</td>
+                                                {% else %}
+                                                    <td colspan="2">NOT YET REVIEWED</td>
+                                            {% endif %}
+                                            {% else %}
+                                                <td>{{ assignment.duedate|date('m/d') }}</td>
+                                                <td colspan="2"><a class="btn btn-xs btn-primary submitAssignment" data-id="{{ assignment.id }}">Submit</a></td>
+                                            {% endif %}
                                         {% endif %}
                                         </tr>
                                     {% endfor %}
@@ -207,9 +233,9 @@
         });
 
         $('.reviewSubmits').click( function() {
-            var catId = $(this).data('id');
-            var url="{{ path( 'student_review', { 'categoryid':'catId'}) }}";
-            url = url.replace( "catId", catId );
+            var assId = $(this).data('id');
+            var url="{{ path( 'student_review', { 'assignmentid':'assId'}) }}";
+            url = url.replace( "assId", assId );
             $('#catModal').load(url);
         });
 

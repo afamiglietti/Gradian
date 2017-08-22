@@ -7,8 +7,8 @@
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <div class="modal-header">
-            <h4 class="modal-title">{{ category.name }}</h4>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{{ category.name }}</h4>
         </div>
         <div class="modal-body">
            <h4>Description</h4>
@@ -18,7 +18,7 @@
             <table class="table table-striped">
                 <tr><th>Name:</th><th>Rubric</th><th>Due Date:</th><th>Required?</th></tr>
                 {% for assignment in category.assignments %}
-                    <tr><td>{{ assignment.name }}</td><td>{% if assignment.rubricLink %}<a href="{{ assignment.rubricLink }}" target="_blank">Rubric</a>{% endif %}</td><td>{{ assignment.duedate|date('m-D-Y') }}</td><td>{% if assignment.required %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td></tr>
+                    <tr><td>{{ assignment.name }}</td><td>{% if assignment.rubricLink %}<a href="{{ assignment.rubricLink }}" target="_blank">Rubric</a>{% endif %}</td><td>{{ assignment.duedate|date('m-d-Y') }}</td><td>{% if assignment.required %}<span class="glyphicon glyphicon-ok"></span>{% endif %}</td></tr>
                 {% endfor %}
             </table>
 

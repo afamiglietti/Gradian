@@ -191,18 +191,18 @@ class SubmissionController extends Controller
     }
 
     /**
-     * Present a list of student submissions in a given category so they can review scores and comments
+     * Present a list of student submissions in a given assignment so they can review scores and comments
+     * Intended for recurring assignments
      *
-     * @Route("/student_review/{categoryid}", name="student_review")
+     * @Route("/student_review/{assignmentid}", name="student_review")
      */
-    public function studentReviewAction($categoryid)
+    public function studentReviewAction($assignmentid)
     {
-        $category = $this->getDoctrine()->getRepository('AssignmentBundle:Category')->find($categoryid);
-        $assignments = $category->getAssignments();
+        $assignment = $this->getDoctrine()->getRepository('AssignmentBundle:Assignment')->find($assignmentid);
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $submissions = $this->getDoctrine()->getRepository('AssignmentBundle:Submission')->findBy(array('user'=>$user, 'assignment'=> $assignments->toArray()));
+        $submissions = $this->getDoctrine()->getRepository('AssignmentBundle:Submission')->findBy(array('user'=>$user, 'assignment'=> $assignment));
 
-        return $this->render('AssignmentBundle:Submission:studentreview.html.twig', array('submissions' => $submissions, 'category' =>$category));
+        return $this->render('AssignmentBundle:Submission:studentreview.html.twig', array('submissions' => $submissions, 'assignment' => $assignment));
     }
 
 }
