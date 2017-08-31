@@ -88,6 +88,8 @@ class DashboardController extends Controller
             $totalScore = $totalScore + $catprogress->getPointsEarned();
         }
 
+        $totalScore = $totalScore + $dash->getQuickPoints();
+
         $newNotificationList = array();
         foreach($catProgresses as $catprogress){
             $notificationSubList = array();

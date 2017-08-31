@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b0e203f2-a24b-49be-bbe0-8a3475218eb1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php" afterPath="$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AssignmentBundle/Controller/SubmissionController.php" afterPath="$PROJECT_DIR$/src/AssignmentBundle/Controller/SubmissionController.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Submission/studentreview.html.twig" afterPath="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Submission/studentreview.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/studentview.html.twig" afterPath="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/studentview.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Category/viewmodal.html.twig" afterPath="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Category/viewmodal.html.twig" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="feedbackTool.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,11 +26,11 @@
     <splitter split-orientation="vertical" split-proportion="0.40373397">
       <split-first>
         <leaf>
-          <file leaf-file-name="DashboardController.php" pinned="false" current-in-tab="false">
+          <file leaf-file-name="DashboardController.php" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-5.625">
-                  <caret line="114" column="53" selection-start-line="114" selection-start-column="53" selection-end-line="114" selection-end-column="53" />
+                <state vertical-scroll-proportion="0.31358886">
+                  <caret line="90" column="8" selection-start-line="90" selection-start-column="8" selection-end-line="90" selection-end-column="8" />
                   <folding>
                     <element signature="e#46#103#0#PHP" expanded="true" />
                   </folding>
@@ -66,7 +61,7 @@
           <file leaf-file-name="Dashboard.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Entity/Dashboard.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.0">
+                <state vertical-scroll-proportion="-52.5">
                   <caret line="120" column="7" selection-start-line="120" selection-start-column="7" selection-end-line="120" selection-end-column="7" />
                   <folding />
                 </state>
@@ -76,7 +71,7 @@
           <file leaf-file-name="SubmissionController.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Controller/SubmissionController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-8.75">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="204" column="148" selection-start-line="204" selection-start-column="148" selection-end-line="204" selection-end-column="148" />
                   <folding />
                 </state>
@@ -93,10 +88,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="studentreview.html.twig" pinned="false" current-in-tab="true">
+          <file leaf-file-name="studentreview.html.twig" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Submission/studentreview.html.twig">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.3205575">
+                <state vertical-scroll-proportion="-0.0">
                   <caret line="10" column="68" selection-start-line="10" selection-start-column="68" selection-end-line="10" selection-end-column="68" />
                   <folding />
                 </state>
@@ -140,8 +135,8 @@
           <file leaf-file-name="studentview.html.twig" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/studentview.html.twig">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="0.49778762">
-                  <caret line="86" column="220" selection-start-line="86" selection-start-column="220" selection-end-line="86" selection-end-column="220" />
+                <state vertical-scroll-proportion="0.23230088">
+                  <caret line="181" column="36" selection-start-line="181" selection-start-column="36" selection-end-line="181" selection-end-column="36" />
                   <folding />
                 </state>
               </provider>
@@ -150,7 +145,7 @@
           <file leaf-file-name="viewmodal.html.twig" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Category/viewmodal.html.twig">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-6.0833335">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="10" column="60" selection-start-line="10" selection-start-column="60" selection-end-line="10" selection-end-column="60" />
                   <folding />
                 </state>
@@ -160,7 +155,7 @@
           <file leaf-file-name="Assignment.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Entity/Assignment.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-36.25">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="89" column="70" selection-start-line="89" selection-start-column="70" selection-end-line="89" selection-end-column="70" />
                   <folding />
                 </state>
@@ -170,7 +165,7 @@
           <file leaf-file-name="AssignmentType.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Form/AssignmentType.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-6.0833335">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
                   <folding />
                 </state>
@@ -180,7 +175,7 @@
           <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Assignment/new.html.twig">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="3.75">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
                   <folding />
                 </state>
@@ -190,7 +185,7 @@
           <file leaf-file-name="AssignmentController.php" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Controller/AssignmentController.php">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-120.458336">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="241" column="56" selection-start-line="241" selection-start-column="56" selection-end-line="241" selection-end-column="56" />
                   <folding />
                 </state>
@@ -210,7 +205,7 @@
           <file leaf-file-name="instrview.html.twig" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/instrview.html.twig">
               <provider selected="true" editor-type-id="text-editor">
-                <state vertical-scroll-proportion="-0.7083333">
+                <state vertical-scroll-proportion="0.0">
                   <caret line="137" column="46" selection-start-line="137" selection-start-column="46" selection-end-line="137" selection-end-column="46" />
                   <folding />
                 </state>
@@ -300,11 +295,11 @@
         <option value="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/projectlink.html.twig" />
         <option value="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/feedbacklink.html.twig" />
         <option value="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/instrview.html.twig" />
-        <option value="$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php" />
         <option value="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Category/viewmodal.html.twig" />
         <option value="$PROJECT_DIR$/src/AssignmentBundle/Controller/SubmissionController.php" />
         <option value="$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Submission/studentreview.html.twig" />
         <option value="$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/studentview.html.twig" />
+        <option value="$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php" />
       </list>
     </option>
   </component>
@@ -854,8 +849,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -934,13 +929,13 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905483" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905483" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -1107,7 +1102,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="16" column="55" selection-start-line="16" selection-start-column="55" selection-end-line="16" selection-end-column="55" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1115,7 +1109,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="82" column="26" selection-start-line="82" selection-start-column="26" selection-end-line="82" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1145,7 +1138,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1153,7 +1145,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="4" column="25" selection-start-line="4" selection-start-column="25" selection-end-line="4" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1168,7 +1159,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="76" column="43" selection-start-line="76" selection-start-column="43" selection-end-line="76" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1200,7 +1190,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-8.125">
           <caret line="72" column="39" selection-start-line="72" selection-start-column="39" selection-end-line="72" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1252,14 +1241,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Entity/Dashboard.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="120" column="7" selection-start-line="120" selection-start-column="7" selection-end-line="120" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/feedbacklink.html.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1278,7 +1259,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/instrview.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.7083333">
+        <state vertical-scroll-proportion="0.0">
           <caret line="137" column="46" selection-start-line="137" selection-start-column="46" selection-end-line="137" selection-end-column="46" />
           <folding />
         </state>
@@ -1286,7 +1267,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Controller/AssignmentController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-120.458336">
+        <state vertical-scroll-proportion="0.0">
           <caret line="241" column="56" selection-start-line="241" selection-start-column="56" selection-end-line="241" selection-end-column="56" />
           <folding />
         </state>
@@ -1294,7 +1275,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Form/AssignmentType.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.0833335">
+        <state vertical-scroll-proportion="0.0">
           <caret line="29" column="29" selection-start-line="29" selection-start-column="29" selection-end-line="29" selection-end-column="29" />
           <folding />
         </state>
@@ -1302,7 +1283,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Assignment/new.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.75">
+        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
@@ -1310,7 +1291,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Entity/Assignment.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-36.25">
+        <state vertical-scroll-proportion="0.0">
           <caret line="89" column="70" selection-start-line="89" selection-start-column="70" selection-end-line="89" selection-end-column="70" />
           <folding />
         </state>
@@ -1318,25 +1299,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Category/viewmodal.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.0833335">
+        <state vertical-scroll-proportion="0.0">
           <caret line="10" column="60" selection-start-line="10" selection-start-column="60" selection-end-line="10" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.625">
-          <caret line="114" column="53" selection-start-line="114" selection-start-column="53" selection-end-line="114" selection-end-column="53" />
-          <folding>
-            <element signature="e#46#103#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Controller/SubmissionController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.75">
+        <state vertical-scroll-proportion="0.0">
           <caret line="204" column="148" selection-start-line="204" selection-start-column="148" selection-end-line="204" selection-end-column="148" />
           <folding />
         </state>
@@ -1344,7 +1315,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/AssignmentBundle/Resources/views/Submission/studentreview.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3205575">
+        <state vertical-scroll-proportion="-0.0">
           <caret line="10" column="68" selection-start-line="10" selection-start-column="68" selection-end-line="10" selection-end-column="68" />
           <folding />
         </state>
@@ -1352,9 +1323,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Resources/views/Default/studentview.html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49778762">
-          <caret line="86" column="220" selection-start-line="86" selection-start-column="220" selection-end-line="86" selection-end-column="220" />
+        <state vertical-scroll-proportion="0.23230088">
+          <caret line="181" column="36" selection-start-line="181" selection-start-column="36" selection-end-line="181" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Entity/Dashboard.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-52.5">
+          <caret line="120" column="7" selection-start-line="120" selection-start-column="7" selection-end-line="120" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/DashboardBundle/Controller/DashboardController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.31358886">
+          <caret line="90" column="8" selection-start-line="90" selection-start-column="8" selection-end-line="90" selection-end-column="8" />
+          <folding>
+            <element signature="e#46#103#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
