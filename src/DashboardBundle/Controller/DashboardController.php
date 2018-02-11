@@ -84,8 +84,13 @@ class DashboardController extends Controller
         $catProgresses = $user->getCategoryProgresses();
 
         foreach($catProgresses as $catprogress){
-            $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
-            $totalScore = $totalScore + $catprogress->getPointsEarned();
+            //This is a terrible, janky way to fix the fact that connecting categoryprogress to user, not dash, mixes up student progress across categories
+            //Fix this properly over the summer, geez
+            if(in_array($catprogress->getCategory(), $course->getCategories()->toArray())){
+                $catProgressList[$catprogress->getCategory()->getId()] = $catprogress;
+                $totalScore = $totalScore + $catprogress->getPointsEarned();
+            }
+
         }
 
         $totalScore = $totalScore + $dash->getQuickPoints();
